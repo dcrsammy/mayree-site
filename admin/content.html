@@ -20,74 +20,49 @@
 .preview-tag { font-size:10px; color:var(--champagne); letter-spacing:1px; margin-left:auto; }
 </style>
 
+
 <style id="admin-gate-style">
-#admin-password-gate {
-  position: fixed; inset: 0;
-  background: #FDFBF7;
-  z-index: 99999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.gate-box {
-  width: 100%;
-  max-width: 400px;
-  padding: 52px 48px;
-  text-align: center;
-  border: 1px solid rgba(201,168,122,.25);
-  background: #FDFBF7;
-}
-.gate-logo { height: 56px; margin: 0 auto 36px; display: block; }
-.gate-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 24px; font-weight: 400;
-  letter-spacing: 2px; color: #1A1208;
-  margin-bottom: 6px;
-}
-.gate-sub {
-  font-size: 10px; letter-spacing: 3px;
-  text-transform: uppercase; color: #9A8878;
-  margin-bottom: 32px;
-}
-.gate-input {
-  width: 100%;
-  background: #F7F3EC;
-  border: 1px solid rgba(201,168,122,.3);
-  padding: 13px 16px;
-  font-size: 14px;
-  font-family: 'Jost', sans-serif;
-  color: #1A1208;
-  outline: none;
-  text-align: center;
-  letter-spacing: 3px;
-  margin-bottom: 16px;
-  transition: border-color .25s;
-}
-.gate-input:focus { border-color: #C9A87A; }
-.gate-btn {
-  width: 100%;
-  background: #3D2B1F;
-  color: #FDFBF7;
-  border: none;
-  padding: 14px;
-  font-size: 10px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  cursor: pointer;
-  font-family: 'Jost', sans-serif;
-  transition: background .25s;
-}
-.gate-btn:hover { background: #6B4E37; }
-.gate-error {
-  font-size: 11px;
-  color: #E53935;
-  margin-top: 12px;
-  letter-spacing: 1px;
-  display: none;
-}
+#admin-password-gate{position:fixed;inset:0;background:#FDFBF7;z-index:99999;display:flex;align-items:center;justify-content:center;}
+.gate-box{width:100%;max-width:380px;padding:52px 44px;text-align:center;border:1px solid rgba(201,168,122,.25);}
+.gate-logo{height:52px;margin:0 auto 32px;display:block;}
+.gate-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;letter-spacing:2px;color:#1A1208;margin-bottom:4px;}
+.gate-sub{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:#9A8878;margin-bottom:28px;}
+.gate-input{width:100%;background:#F7F3EC;border:1px solid rgba(201,168,122,.3);padding:13px 16px;font-size:16px;font-family:'Jost',sans-serif;color:#1A1208;outline:none;text-align:center;letter-spacing:4px;margin-bottom:14px;transition:border-color .25s;}
+.gate-input:focus{border-color:#C9A87A;}
+.gate-btn{width:100%;background:#3D2B1F;color:#FDFBF7;border:none;padding:14px;font-size:10px;letter-spacing:3px;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;}
+.gate-btn:hover{background:#6B4E37;}
+.gate-error{font-size:11px;color:#E53935;margin-top:10px;letter-spacing:1px;min-height:16px;}
 </style>
 </head>
 <body class="page-fade">
+<div id="admin-password-gate">
+  <div class="gate-box">
+    <img class="gate-logo" src="/assets/logo.png" alt="MAYREE"/>
+    <div class="gate-title">Admin Panel</div>
+    <div class="gate-sub">Enter password to continue</div>
+    <input type="password" class="gate-input" id="gate-input" placeholder="••••••••" onkeydown="if(event.key==='Enter')checkGate()" autocomplete="off"/>
+    <button class="gate-btn" onclick="checkGate()">Enter</button>
+    <div class="gate-error" id="gate-error"></div>
+  </div>
+</div>
+<script>
+var _AP = 'A12dcmoney';
+var _AK = 'myadmin99';
+if(sessionStorage.getItem(_AK)==='1'){
+  document.getElementById('admin-password-gate').style.display='none';
+}
+function checkGate(){
+  var v=document.getElementById('gate-input').value;
+  if(v===_AP){
+    sessionStorage.setItem(_AK,'1');
+    document.getElementById('admin-password-gate').style.display='none';
+  } else {
+    document.getElementById('gate-error').textContent='Incorrect password';
+    document.getElementById('gate-input').value='';
+    document.getElementById('gate-input').focus();
+  }
+}
+</script>
 <div class="admin-layout">
 <aside class="admin-sidebar">
   <div class="admin-sidebar-logo">
