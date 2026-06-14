@@ -247,7 +247,14 @@
   }
 
   function changeQty(delta) {
-    qty = Math.max(1, qty + delta);
+    const maxStock = currentProduct ? (currentProduct.stock || 1) : 1;
+    const newQty = qty + delta;
+    if (newQty < 1) return;
+    if (newQty > maxStock) {
+      showToast('Only ' + maxStock + ' available — contact us if you need more', 'error');
+      return;
+    }
+    qty = newQty;
     document.getElementById('qty-display').textContent = qty;
   }
 
