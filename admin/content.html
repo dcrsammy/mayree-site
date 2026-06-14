@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Content Editor — Admin MAYREE</title>
+<link rel="stylesheet" href="/css/mayree.css"/>
+<link rel="icon" href="/assets/logo.png"/>
+<style>
+.content-section { background:var(--ivory); border:1px solid var(--border); padding:28px; margin-bottom:24px; }
+.content-section-title { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; margin-bottom:20px; padding-bottom:12px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+.content-field { margin-bottom:18px; }
+.content-label { font-size:9px; letter-spacing:3px; text-transform:uppercase; color:var(--muted); margin-bottom:6px; display:block; }
+.content-input { width:100%; background:var(--cream); border:1px solid var(--border); padding:11px 14px; font-size:13px; font-family:'Jost',sans-serif; color:var(--ink); outline:none; transition:border-color .2s; }
+.content-input:focus { border-color:var(--champagne); }
+.content-textarea { width:100%; background:var(--cream); border:1px solid var(--border); padding:11px 14px; font-size:13px; font-family:'Jost',sans-serif; color:var(--ink); outline:none; resize:vertical; min-height:80px; transition:border-color .2s; }
+.content-textarea:focus { border-color:var(--champagne); }
+.save-section-btn { font-size:9px; letter-spacing:2px; text-transform:uppercase; background:none; border:1px solid var(--border); padding:8px 18px; cursor:pointer; font-family:'Jost',sans-serif; color:var(--muted); transition:all .2s; }
+.save-section-btn:hover { border-color:var(--champagne); color:var(--gold); }
+.preview-tag { font-size:10px; color:var(--champagne); letter-spacing:1px; margin-left:auto; }
+</style>
+</head>
+<body class="page-fade">
+<div class="admin-layout">
+<aside class="admin-sidebar">
+  <div class="admin-sidebar-logo">
+    <img src="/assets/logo.png" alt="MAYREE"/>
+    <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(201,168,122,.5);margin-top:8px;">Admin Panel</div>
+  </div>
+  <a href="/admin/index.html" class="admin-nav-link">📊 &nbsp;Dashboard</a>
+  <a href="/admin/products.html" class="admin-nav-link">👜 &nbsp;Products</a>
+  <a href="/admin/orders.html" class="admin-nav-link">📦 &nbsp;Orders</a>
+  <a href="/admin/customers.html" class="admin-nav-link">👥 &nbsp;Customers</a>
+  <a href="/admin/content.html" class="admin-nav-link active">✏️ &nbsp;Content</a>
+  <div style="border-top:1px solid rgba(255,255,255,.08);margin:24px 0;"></div>
+  <a href="/index.html" target="_blank" class="admin-nav-link">🏠 &nbsp;View Site</a>
+  <a href="/shop.html" target="_blank" class="admin-nav-link">🛍 &nbsp;View Shop</a>
+</aside>
+
+<main class="admin-main">
+  <div class="admin-header">
+    <div>
+      <h1 class="admin-title">Content Editor</h1>
+      <p style="font-size:12px;color:var(--muted);margin-top:4px;">Edit every word on your site. Changes go live instantly.</p>
+    </div>
+    <button class="btn btn-dark" onclick="saveAll()">Save All Changes</button>
+  </div>
+
+  <!-- ANNOUNCE BAR -->
+  <div class="content-section">
+    <div class="content-section-title">📢 Announce Bar <span class="preview-tag">Top of every page</span></div>
+    <div class="content-field">
+      <label class="content-label">Announcement Text</label>
+      <input type="text" class="content-input" id="announce_text" placeholder="Free shipping on orders over ₦80,000 · New arrivals weekly · Worldwide delivery"/>
+    </div>
+    <button class="save-section-btn" onclick="saveSection(['announce_text'])">Save</button>
+  </div>
+
+  <!-- HERO -->
+  <div class="content-section">
+    <div class="content-section-title">🏠 Homepage Hero <span class="preview-tag">Main banner</span></div>
+    <div class="content-field">
+      <label class="content-label">Hero Eyebrow</label>
+      <input type="text" class="content-input" id="hero_eyebrow" placeholder="Lagos · Worldwide Shipping"/>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Hero Headline</label>
+      <input type="text" class="content-input" id="hero_headline" placeholder="Crafted for Every Woman's Journey"/>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Hero Subtext</label>
+      <input type="text" class="content-input" id="hero_sub" placeholder="Curated luxury · Bespoke sourcing · Original designs"/>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Hero Button 1</label>
+      <input type="text" class="content-input" id="hero_btn1" placeholder="Shop New Arrivals"/>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Hero Button 2</label>
+      <input type="text" class="content-input" id="hero_btn2" placeholder="Explore The Edit"/>
+    </div>
+    <button class="save-section-btn" onclick="saveSection(['hero_eyebrow','hero_headline','hero_sub','hero_btn1','hero_btn2'])">Save</button>
+  </div>
+
+  <!-- BRAND STORY -->
+  <div class="content-section">
+    <div class="content-section-title">📖 Brand Story <span class="preview-tag">Editorial section</span></div>
+    <div class="content-field">
+      <label class="content-label">Story Headline Line 1</label>
+      <input type="text" class="content-input" id="story_headline1" placeholder="She Already Knows."/>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Story Headline Line 2 (gold italic)</label>
+      <input type="text" class="content-input" id="story_headline2" placeholder="We Just Made It."/>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Story Paragraph 1</label>
+      <textarea class="content-textarea" id="story_p1" placeholder="Nobody taught you taste..."></textarea>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Story Paragraph 2</label>
+      <textarea class="content-textarea" id="story_p2" placeholder="Mayree was built for that knowing..."></textarea>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Story Button Text</label>
+      <input type="text" class="content-input" id="story_btn" placeholder="Shop The Edit"/>
+    </div>
+    <button class="save-section-btn" onclick="saveSection(['story_headline1','story_headline2','story_p1','story_p2','story_btn'])">Save</button>
+  </div>
+
+  <!-- BY REQUEST -->
+  <div class="content-section">
+    <div class="content-section-title">📩 By Request Section <span class="preview-tag">Homepage</span></div>
+    <div class="content-field">
+      <label class="content-label">Section Title</label>
+      <input type="text" class="content-input" id="request_title" placeholder="Mayree By Request"/>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Description</label>
+      <textarea class="content-textarea" id="request_desc" placeholder="Saw something you love?..."></textarea>
+    </div>
+    <div class="content-field">
+      <label class="content-label">WhatsApp Number (with country code, no +)</label>
+      <input type="text" class="content-input" id="whatsapp_number" placeholder="2348000000000"/>
+    </div>
+    <button class="save-section-btn" onclick="saveSection(['request_title','request_desc','whatsapp_number'])">Save</button>
+  </div>
+
+  <!-- NEWSLETTER -->
+  <div class="content-section">
+    <div class="content-section-title">📧 Newsletter Section <span class="preview-tag">Homepage bottom</span></div>
+    <div class="content-field">
+      <label class="content-label">Headline</label>
+      <input type="text" class="content-input" id="nl_headline" placeholder="Be The First to Know"/>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Subtext</label>
+      <textarea class="content-textarea" id="nl_sub" placeholder="New arrivals, exclusive drops..."></textarea>
+    </div>
+    <button class="save-section-btn" onclick="saveSection(['nl_headline','nl_sub'])">Save</button>
+  </div>
+
+  <!-- SHOP PAGE -->
+  <div class="content-section">
+    <div class="content-section-title">🛍 Shop Page <span class="preview-tag">shop.html</span></div>
+    <div class="content-field">
+      <label class="content-label">Page Eyebrow</label>
+      <input type="text" class="content-input" id="shop_eyebrow" placeholder="The Mayree Edit"/>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Page Title</label>
+      <input type="text" class="content-input" id="shop_title" placeholder="All Pieces"/>
+    </div>
+    <button class="save-section-btn" onclick="saveSection(['shop_eyebrow','shop_title'])">Save</button>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="content-section">
+    <div class="content-section-title">🔻 Footer <span class="preview-tag">Bottom of every page</span></div>
+    <div class="content-field">
+      <label class="content-label">Footer Tagline</label>
+      <input type="text" class="content-input" id="footer_tagline" placeholder="Luxury bags, curated and crafted. Lagos, Nigeria · Worldwide Shipping."/>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Copyright Text</label>
+      <input type="text" class="content-input" id="footer_copy" placeholder="© 2025 Mayree. All rights reserved."/>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Instagram Handle</label>
+      <input type="text" class="content-input" id="instagram_handle" placeholder="@mayree"/>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Instagram URL</label>
+      <input type="text" class="content-input" id="instagram_url" placeholder="https://instagram.com/mayree"/>
+    </div>
+    <div class="content-field">
+      <label class="content-label">TikTok URL</label>
+      <input type="text" class="content-input" id="tiktok_url" placeholder="https://tiktok.com/@mayree"/>
+    </div>
+    <div class="content-field">
+      <label class="content-label">Contact Email</label>
+      <input type="text" class="content-input" id="contact_email" placeholder="hello@mayree.co"/>
+    </div>
+    <button class="save-section-btn" onclick="saveSection(['footer_tagline','footer_copy','instagram_handle','instagram_url','tiktok_url','contact_email'])">Save</button>
+  </div>
+
+</main>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script>
+
+// Load all content from Supabase
+async function loadContent() {
+  const { data } = await sb.from('content').select('*');
+  if (!data) return;
+  data.forEach(row => {
+    const el = document.getElementById(row.key);
+    if (el) el.value = row.value;
+  });
+}
+
+// Save specific keys
+async function saveSection(keys) {
+  const rows = keys.map(key => {
+    const el = document.getElementById(key);
+    return { key, value: el ? el.value : '', updated_at: new Date().toISOString() };
+  }).filter(r => r.value);
+
+  const { error } = await sb.from('content').upsert(rows, { onConflict: 'key' });
+  if (error) { showToast('Save failed: ' + error.message, 'error'); return; }
+  showToast('Saved ✓');
+}
+
+// Save everything
+async function saveAll() {
+  const allIds = [
+    'announce_text',
+    'hero_eyebrow','hero_headline','hero_sub','hero_btn1','hero_btn2',
+    'story_headline1','story_headline2','story_p1','story_p2','story_btn',
+    'request_title','request_desc','whatsapp_number',
+    'nl_headline','nl_sub',
+    'shop_eyebrow','shop_title',
+    'footer_tagline','footer_copy','instagram_handle','instagram_url','tiktok_url','contact_email'
+  ];
+  await saveSection(allIds);
+  showToast('All content saved ✓');
+}
+
+function showToast(msg, type='success') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 3000);
+}
+
+loadContent();
+</script>
+</body>
+</html>
