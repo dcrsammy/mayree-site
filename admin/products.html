@@ -579,6 +579,8 @@ async function submitProduct() {
       badge:          document.getElementById('f-badge').value,
       description:    document.getElementById('f-desc').value.trim(),
       active:         fieldActive,
+      product_type:   document.getElementById('f-type').value || 'edit',
+      stock:          parseInt(document.getElementById('f-stock').value) || 1,
       imageFiles:     newFiles,
       existingImages: existingImgs,
       keepExisting:   true,
