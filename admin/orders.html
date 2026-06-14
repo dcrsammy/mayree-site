@@ -6,6 +6,73 @@
 <title>Orders — Admin MAYREE</title>
 <link rel="stylesheet" href="/css/mayree.css"/>
 <link rel="icon" href="/assets/logo.png"/>
+
+<style id="admin-gate-style">
+#admin-password-gate {
+  position: fixed; inset: 0;
+  background: #FDFBF7;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gate-box {
+  width: 100%;
+  max-width: 400px;
+  padding: 52px 48px;
+  text-align: center;
+  border: 1px solid rgba(201,168,122,.25);
+  background: #FDFBF7;
+}
+.gate-logo { height: 56px; margin: 0 auto 36px; display: block; }
+.gate-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 24px; font-weight: 400;
+  letter-spacing: 2px; color: #1A1208;
+  margin-bottom: 6px;
+}
+.gate-sub {
+  font-size: 10px; letter-spacing: 3px;
+  text-transform: uppercase; color: #9A8878;
+  margin-bottom: 32px;
+}
+.gate-input {
+  width: 100%;
+  background: #F7F3EC;
+  border: 1px solid rgba(201,168,122,.3);
+  padding: 13px 16px;
+  font-size: 14px;
+  font-family: 'Jost', sans-serif;
+  color: #1A1208;
+  outline: none;
+  text-align: center;
+  letter-spacing: 3px;
+  margin-bottom: 16px;
+  transition: border-color .25s;
+}
+.gate-input:focus { border-color: #C9A87A; }
+.gate-btn {
+  width: 100%;
+  background: #3D2B1F;
+  color: #FDFBF7;
+  border: none;
+  padding: 14px;
+  font-size: 10px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-family: 'Jost', sans-serif;
+  transition: background .25s;
+}
+.gate-btn:hover { background: #6B4E37; }
+.gate-error {
+  font-size: 11px;
+  color: #E53935;
+  margin-top: 12px;
+  letter-spacing: 1px;
+  display: none;
+}
+</style>
 </head>
 <body class="page-fade">
 </div>
