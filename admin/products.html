@@ -374,7 +374,7 @@ function renderGrid(products) {
           ${fmt(p.price)}
           ${p.old_price ? `<span class="pac-price-old">${fmt(p.old_price)}</span>` : ''}
         </div>
-        <div style="font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;">📦 Stock: <strong style="color:var(--ink);">' + (p.stock||0) + '</strong> &nbsp;·&nbsp; <span style="color:' + (p.product_type==='request'?'var(--mocha)':'var(--success)') + ';">' + (p.product_type==='request'?'By Request':'The Edit') + '</span></div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;">📦 Stock: <strong style="color:var(--ink);">${p.stock||0}</strong> &nbsp;·&nbsp; <span style="color:${p.product_type==='request'?'var(--mocha)':'var(--success)'};">${p.product_type==='request'?'By Request':'The Edit'}</span></div>
         <div class="pac-actions">
           <button class="btn btn-ghost btn-sm" onclick="openEditModal('${p.id}')">Edit</button>
           <div class="pac-status-toggle" onclick="quickToggleActive('${p.id}', ${!p.active})">
