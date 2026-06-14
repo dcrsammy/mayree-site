@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FAQs — MAYREE</title>
+<link rel="stylesheet" href="/css/mayree.css"/>
+<link rel="icon" href="/assets/logo.png"/>
+<style>
+.faq-item { border-bottom:1px solid var(--border); }
+.faq-q { display:flex; justify-content:space-between; align-items:center; padding:20px 0; cursor:pointer; font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:400; color:var(--ink); gap:20px; }
+.faq-q:hover { color:var(--gold); }
+.faq-icon { font-size:22px; color:var(--champagne); flex-shrink:0; transition:transform .3s; }
+.faq-a { font-size:13px; line-height:1.9; color:var(--muted); padding-bottom:20px; display:none; }
+.faq-a.open { display:block; }
+.faq-icon.open { transform:rotate(45deg); }
+.faq-cat { font-size:9px; letter-spacing:4px; text-transform:uppercase; color:var(--champagne); margin:40px 0 16px; display:block; }
+</style>
+</head>
+<body class="page-fade">
+<div class="announce">✦ &nbsp;Questions? We're always here &nbsp;✦</div>
+<nav class="main-nav">
+  <div class="nav-inner">
+    <div class="nav-left"><a href="/index.html" class="nav-link">Home</a><a href="/shop.html" class="nav-link">The Edit</a></div>
+    <div class="nav-logo"><a href="/index.html"><img src="/assets/logo.png" alt="MAYREE"/></a></div>
+    <div class="nav-right">
+      <a href="/login.html" class="nav-link" id="nav-login">Login</a>
+      <a href="/account.html" class="nav-link" id="nav-account" style="display:none">Account</a>
+      <button class="nav-icon" onclick="window.location='/wishlist.html'">♡</button>
+      <button class="nav-icon" onclick="window.location='/cart.html'" style="position:relative">🛍 <span class="cart-count" id="cart-badge">0</span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <span class="ey">Got Questions?</span>
+  <h1 class="sec-title">Frequently Asked Questions</h1>
+  <div class="rule"></div>
+</div>
+
+<div class="wrap" style="max-width:780px;padding-top:60px;padding-bottom:100px;">
+
+  <span class="faq-cat">Orders & Payment</span>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>How do I place an order?</span><span class="faq-icon">+</span></div><div class="faq-a">Browse The Edit, select your piece, add it to your cart and proceed to checkout. We accept card payments via Paystack and bank transfer.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>What payment methods do you accept?</span><span class="faq-icon">+</span></div><div class="faq-a">We accept all major debit and credit cards (Visa, Mastercard, Verve) via Paystack, as well as bank transfers. All payments are processed securely.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Can I modify or cancel my order after placing it?</span><span class="faq-icon">+</span></div><div class="faq-a">You can cancel or modify your order within 2 hours of placing it. After that, your order goes into processing and can no longer be changed. Contact us immediately via WhatsApp if you need to make changes.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Is my payment information safe?</span><span class="faq-icon">+</span></div><div class="faq-a">Absolutely. All payments are processed through Paystack, which uses bank-level encryption. We never store your card details on our servers.</div></div>
+
+  <span class="faq-cat">Shipping & Delivery</span>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>How long does delivery take?</span><span class="faq-icon">+</span></div><div class="faq-a">Lagos orders arrive in 1–3 business days. Other states take 3–5 business days. International orders vary — contact us for a quote.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Do you ship internationally?</span><span class="faq-icon">+</span></div><div class="faq-a">Yes, we ship worldwide. Please WhatsApp or email us before placing an international order so we can confirm availability and shipping costs for your location.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>How do I track my order?</span><span class="faq-icon">+</span></div><div class="faq-a">You can track your order at any time from our <a href="/track.html" style="color:var(--champagne);">Track My Order</a> page using your order reference number. You can also find this in your account under My Orders.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Is there free shipping?</span><span class="faq-icon">+</span></div><div class="faq-a">Yes — all orders over ₦80,000 qualify for free standard shipping within Nigeria.</div></div>
+
+  <span class="faq-cat">Products</span>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>What is The Edit?</span><span class="faq-icon">+</span></div><div class="faq-a">The Edit is our curated collection of one-of-one bags. Each piece starts as a luxury brand promotional piece and is transformed through artisan customization into a fully functional, wearable statement bag. Once a piece is sold, it's gone — no restocks.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>What is By Request?</span><span class="faq-icon">+</span></div><div class="faq-a">By Request is our bespoke sourcing service. If you see something you love but can't find — send it to us. We source it internationally, handle the logistics, and deliver it directly to you. <a href="https://wa.me/2348000000000" style="color:var(--champagne);">WhatsApp us</a> to get started.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Are the bags authentic?</span><span class="faq-icon">+</span></div><div class="faq-a">Every bag in The Edit is a genuine luxury brand promotional piece that has been artisan-transformed. They are not replicas or fakes. They are real pieces, reimagined.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>What are Mayree Originals?</span><span class="faq-icon">+</span></div><div class="faq-a">Mayree Originals are bags designed entirely by us — our silhouettes, our hardware, our name. They will be released in limited drops. Sign up to our newsletter to be the first to know.</div></div>
+
+  <span class="faq-cat">Returns & Refunds</span>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>What is your return policy?</span><span class="faq-icon">+</span></div><div class="faq-a">We accept returns within 14 days of delivery for unused items in their original packaging. See our full <a href="/returns.html" style="color:var(--champagne);">Returns Policy</a> for details.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>How long does a refund take?</span><span class="faq-icon">+</span></div><div class="faq-a">Once we receive and inspect your return, refunds are processed within 3–5 business days back to your original payment method.</div></div>
+  <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)"><span>Can I exchange instead of returning?</span><span class="faq-icon">+</span></div><div class="faq-a">Yes — if you'd like to exchange for another piece in The Edit, contact us and we'll do our best to make it work. Exchanges are subject to availability.</div></div>
+
+  <div style="background:var(--rose);padding:32px;text-align:center;margin-top:48px;">
+    <p style="font-size:14px;color:var(--mocha);margin-bottom:16px;">Still have a question?</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
+      <a href="https://wa.me/2348000000000" target="_blank" class="btn btn-dark btn-sm">WhatsApp Us</a>
+      <a href="mailto:hello@mayree.co" class="btn btn-ghost btn-sm">Email Us</a>
+    </div>
+  </div>
+</div>
+
+<footer class="main-footer">
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div><div class="ft-logo"><img src="/assets/logo.png" alt="MAYREE"/></div><p class="ft-desc">Luxury bags, curated and crafted.</p></div>
+      <div><span class="ft-col-title">Shop</span><ul class="ft-links"><li><a href="/shop.html">The Edit</a></li></ul></div>
+      <div><span class="ft-col-title">Help</span><ul class="ft-links"><li><a href="/track.html">Track Order</a></li><li><a href="/shipping.html">Shipping</a></li><li><a href="/returns.html">Returns</a></li><li><a href="/faqs.html">FAQs</a></li></ul></div>
+      <div><span class="ft-col-title">Account</span><ul class="ft-links"><li><a href="/login.html">Login</a></li></ul></div>
+      <div><span class="ft-col-title">Connect</span><ul class="ft-links"><li><a href="https://instagram.com/mayree">Instagram</a></li><li><a href="https://wa.me/2348000000000">WhatsApp</a></li></ul></div>
+    </div>
+    <div class="ft-bot"><span class="ft-copy">© 2025 Mayree. All rights reserved.</span></div>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script>
+updateCartBadge();updateNavAuth();
+function toggleFaq(el) {
+  var a = el.nextElementSibling;
+  var icon = el.querySelector('.faq-icon');
+  var isOpen = a.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(function(x){x.classList.remove('open');});
+  document.querySelectorAll('.faq-icon').forEach(function(x){x.classList.remove('open');});
+  if (!isOpen) { a.classList.add('open'); icon.classList.add('open'); }
+}
+</script>
+</body>
+</html>
