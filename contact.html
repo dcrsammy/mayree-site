@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Contact Us — MAYREE</title>
+<link rel="stylesheet" href="/css/mayree.css"/>
+<link rel="icon" href="/assets/logo.png"/>
+<style>
+.contact-wrap{max-width:900px;margin:0 auto;padding:60px 28px 100px;}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:start;}
+.contact-info h2{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:16px;}
+.contact-info p{font-size:13px;line-height:1.95;color:var(--muted);margin-bottom:32px;}
+.contact-method{display:flex;gap:16px;align-items:flex-start;margin-bottom:24px;}
+.contact-method-icon{width:42px;height:42px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.contact-method-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.contact-method-val{font-size:13px;color:var(--ink);}
+.contact-method-val a{color:var(--ink);transition:color .2s;}
+.contact-method-val a:hover{color:var(--gold);}
+.contact-hours{font-size:11px;color:var(--muted);margin-top:2px;}
+@media(max-width:768px){.contact-grid{grid-template-columns:1fr;gap:40px;}}
+</style>
+</head>
+<body class="page-fade">
+<div class="announce">✦ &nbsp;We respond within 24 hours &nbsp;✦</div>
+<nav class="main-nav">
+  <div class="nav-inner">
+    <div class="nav-left"><a href="/index.html" class="nav-link">Home</a><a href="/shop.html" class="nav-link">The Edit</a></div>
+    <div class="nav-logo"><a href="/index.html"><img src="/assets/logo.png" alt="MAYREE"/></a></div>
+    <div class="nav-right">
+      <a href="/login.html" class="nav-link" id="nav-login">Login</a>
+      <a href="/account.html" class="nav-link" id="nav-account" style="display:none">Account</a>
+      <button class="nav-icon" onclick="window.location='/wishlist.html'">♡</button>
+      <button class="nav-icon" onclick="window.location='/cart.html'" style="position:relative">🛍 <span class="cart-count" id="cart-badge">0</span></button>
+      <button class="nav-toggle" id="nav-toggle">☰</button>
+    </div>
+  </div>
+</nav>
+<div class="nav-mobile" id="nav-mobile">
+  <button class="nav-mobile-close" id="nav-close">✕</button>
+  <a href="/index.html">Home</a><a href="/shop.html">Shop</a><a href="/cart.html">Cart</a><a href="/account.html">Account</a>
+</div>
+<div class="page-header">
+  <div class="breadcrumb" style="justify-content:center;"><a href="/index.html">Home</a><span>/</span><span>Contact</span></div>
+  <span class="ey">We're Here</span>
+  <h1 class="sec-title">Contact Us</h1>
+  <div class="rule"></div>
+</div>
+<div class="contact-wrap">
+  <div class="contact-grid">
+    <!-- LEFT: CONTACT INFO -->
+    <div>
+      <div class="contact-info">
+        <h2>Let's Talk</h2>
+        <p>Whether you have a question about an order, want to make a By Request, or just want to say hello — we're always here.</p>
+      </div>
+      <div class="contact-method">
+        <div class="contact-method-icon">💬</div>
+        <div>
+          <div class="contact-method-label">WhatsApp</div>
+          <div class="contact-method-val"><a href="https://wa.me/2348000000000" target="_blank">+234 800 000 0000</a></div>
+          <div class="contact-hours">Mon – Sat · 9am – 8pm WAT</div>
+        </div>
+      </div>
+      <div class="contact-method">
+        <div class="contact-method-icon">✉️</div>
+        <div>
+          <div class="contact-method-label">Email</div>
+          <div class="contact-method-val"><a href="mailto:hello@mayree.co">hello@mayree.co</a></div>
+          <div class="contact-hours">We respond within 24 hours</div>
+        </div>
+      </div>
+      <div class="contact-method">
+        <div class="contact-method-icon">📍</div>
+        <div>
+          <div class="contact-method-label">Based In</div>
+          <div class="contact-method-val">Lagos, Nigeria</div>
+          <div class="contact-hours">Shipping worldwide</div>
+        </div>
+      </div>
+      <div class="contact-method">
+        <div class="contact-method-icon">📸</div>
+        <div>
+          <div class="contact-method-label">Instagram</div>
+          <div class="contact-method-val"><a href="https://instagram.com/mayree" target="_blank">@mayree</a></div>
+          <div class="contact-hours">DMs open</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: CONTACT FORM -->
+    <div>
+      <div style="background:var(--cream);padding:36px;border:1px solid var(--border);">
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;margin-bottom:24px;">Send a Message</h3>
+        <div class="form-group">
+          <label class="form-label">Your Name</label>
+          <input type="text" id="c-name" class="form-control" placeholder="Full name"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="c-email" class="form-control" placeholder="hello@email.com"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Subject</label>
+          <select id="c-subject" class="form-control">
+            <option value="">Select a topic</option>
+            <option>Order Inquiry</option>
+            <option>By Request</option>
+            <option>Returns & Refunds</option>
+            <option>Shipping Question</option>
+            <option>Product Question</option>
+            <option>Partnership / Collaboration</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea id="c-message" class="form-control" rows="5" placeholder="Tell us how we can help..."></textarea>
+        </div>
+        <button class="btn btn-dark btn-full" onclick="sendMessage()">Send Message</button>
+        <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px;">Or reach us instantly on <a href="https://wa.me/2348000000000" style="color:var(--champagne);">WhatsApp</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+<footer class="main-footer">
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div><div class="ft-logo"><img src="/assets/logo.png" alt="MAYREE"/></div><p class="ft-desc">Luxury bags, curated and crafted.<br/>Lagos, Nigeria · Worldwide Shipping.</p></div>
+      <div><span class="ft-col-title">Shop</span><ul class="ft-links"><li><a href="/shop.html">The Edit</a></li></ul></div>
+      <div><span class="ft-col-title">Help</span><ul class="ft-links"><li><a href="/track.html">Track Order</a></li><li><a href="/shipping.html">Shipping</a></li><li><a href="/returns.html">Returns</a></li><li><a href="/faq.html">FAQs</a></li></ul></div>
+      <div><span class="ft-col-title">Account</span><ul class="ft-links"><li><a href="/login.html">Login</a></li></ul></div>
+      <div><span class="ft-col-title">Connect</span><ul class="ft-links"><li><a href="https://instagram.com/mayree">Instagram</a></li><li><a href="https://wa.me/2348000000000">WhatsApp</a></li></ul></div>
+    </div>
+    <div class="ft-bot"><span class="ft-copy">© 2025 Mayree. All rights reserved.</span></div>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script>
+updateCartBadge();updateNavAuth();
+document.getElementById('nav-toggle').addEventListener('click',()=>document.getElementById('nav-mobile').classList.add('open'));
+document.getElementById('nav-close').addEventListener('click',()=>document.getElementById('nav-mobile').classList.remove('open'));
+
+async function sendMessage(){
+  var name=document.getElementById('c-name').value.trim();
+  var email=document.getElementById('c-email').value.trim();
+  var subject=document.getElementById('c-subject').value;
+  var message=document.getElementById('c-message').value.trim();
+  if(!name||!email||!subject||!message){showToast('Please fill in all fields','error');return;}
+  
+  var btn=event.target;
+  btn.disabled=true;btn.textContent='Sending...';
+
+  var{error}=await sb.from('messages').insert({name,email,subject,message,created_at:new Date().toISOString()});
+  
+  if(error){
+    // Fallback to WhatsApp if table doesn't exist
+    var wa='https://wa.me/2348000000000?text=Hi+Mayree,+I+have+a+'+encodeURIComponent(subject)+'+inquiry.+My+name+is+'+encodeURIComponent(name)+'.+'+encodeURIComponent(message);
+    window.open(wa,'_blank');
+    showToast('Opening WhatsApp...');
+  } else {
+    showToast('Message sent! We will respond within 24 hours.');
+    document.getElementById('c-name').value='';
+    document.getElementById('c-email').value='';
+    document.getElementById('c-subject').value='';
+    document.getElementById('c-message').value='';
+  }
+  btn.disabled=false;btn.textContent='Send Message';
+}
+
+function showToast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.className='toast show '+(type||'success');
+  setTimeout(function(){t.classList.remove('show');},3000);
+}
+</script>
+</body>
+</html>

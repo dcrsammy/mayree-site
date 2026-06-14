@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Shipping Info — MAYREE</title>
+<link rel="stylesheet" href="/css/mayree.css"/>
+<link rel="icon" href="/assets/logo.png"/>
+<style>
+.info-wrap{max-width:720px;margin:0 auto;padding:60px 28px 100px;}
+.info-section{margin-bottom:48px;}
+.info-section h2{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:400;letter-spacing:1px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+.info-section p{font-size:13px;line-height:1.95;color:var(--muted);margin-bottom:12px;}
+.info-table{width:100%;border-collapse:collapse;margin-top:12px;}
+.info-table th{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);padding:10px 0;border-bottom:1px solid var(--border);text-align:left;}
+.info-table td{padding:14px 0;border-bottom:1px solid var(--border);font-size:13px;color:var(--muted);}
+.info-table td:first-child{color:var(--ink);font-weight:400;}
+</style>
+</head>
+<body class="page-fade">
+<div class="announce">✦ &nbsp;Free shipping on orders over ₦80,000 &nbsp;✦</div>
+<nav class="main-nav">
+  <div class="nav-inner">
+    <div class="nav-left"><a href="/index.html" class="nav-link">Home</a><a href="/shop.html" class="nav-link">The Edit</a></div>
+    <div class="nav-logo"><a href="/index.html"><img src="/assets/logo.png" alt="MAYREE"/></a></div>
+    <div class="nav-right">
+      <a href="/login.html" class="nav-link" id="nav-login">Login</a>
+      <a href="/account.html" class="nav-link" id="nav-account" style="display:none">Account</a>
+      <button class="nav-icon" onclick="window.location='/wishlist.html'">♡</button>
+      <button class="nav-icon" onclick="window.location='/cart.html'" style="position:relative">🛍 <span class="cart-count" id="cart-badge">0</span></button>
+      <button class="nav-toggle" id="nav-toggle">☰</button>
+    </div>
+  </div>
+</nav>
+<div class="nav-mobile" id="nav-mobile">
+  <button class="nav-mobile-close" id="nav-close">✕</button>
+  <a href="/index.html">Home</a><a href="/shop.html">Shop</a><a href="/cart.html">Cart</a><a href="/account.html">Account</a>
+</div>
+<div class="page-header">
+  <div class="breadcrumb" style="justify-content:center;"><a href="/index.html">Home</a><span>/</span><span>Shipping Info</span></div>
+  <span class="ey">Delivery</span>
+  <h1 class="sec-title">Shipping Information</h1>
+  <div class="rule"></div>
+</div>
+<div class="info-wrap">
+  <div class="info-section">
+    <h2>Delivery Times</h2>
+    <p>We process and dispatch all orders within 1–2 business days. Once dispatched you will receive a tracking update via email or WhatsApp.</p>
+    <table class="info-table">
+      <thead><tr><th>Destination</th><th>Delivery Time</th><th>Cost</th></tr></thead>
+      <tbody>
+        <tr><td>Lagos (Island & Mainland)</td><td>1–2 business days</td><td>₦2,500</td></tr>
+        <tr><td>Other Nigerian States</td><td>3–5 business days</td><td>₦3,500</td></tr>
+        <tr><td>West Africa (Ghana, Senegal etc)</td><td>5–10 business days</td><td>From $15</td></tr>
+        <tr><td>UK & Europe</td><td>7–14 business days</td><td>From $25</td></tr>
+        <tr><td>USA & Canada</td><td>7–14 business days</td><td>From $30</td></tr>
+        <tr><td>Rest of World</td><td>10–21 business days</td><td>Contact us</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="info-section">
+    <h2>Free Shipping</h2>
+    <p>All orders over ₦80,000 qualify for free standard shipping within Nigeria. This is automatically applied at checkout — no code needed.</p>
+  </div>
+  <div class="info-section">
+    <h2>Order Tracking</h2>
+    <p>Once your order ships, you can track it at any time using your order reference number on our <a href="/track.html" style="color:var(--gold);">Track Order</a> page. You can also find your reference in your confirmation email or under My Account.</p>
+  </div>
+  <div class="info-section">
+    <h2>International Shipping</h2>
+    <p>We ship worldwide. International orders may be subject to customs duties and import taxes depending on the destination country — these are the buyer's responsibility. Mayree is not liable for customs delays.</p>
+    <p>For international shipping quotes or inquiries, please <a href="https://wa.me/2348000000000" target="_blank" style="color:var(--gold);">WhatsApp us</a> or email <a href="mailto:hello@mayree.co" style="color:var(--gold);">hello@mayree.co</a>.</p>
+  </div>
+  <div class="info-section">
+    <h2>Questions?</h2>
+    <p>Reach us on <a href="https://wa.me/2348000000000" target="_blank" style="color:var(--gold);">WhatsApp</a> or email <a href="mailto:hello@mayree.co" style="color:var(--gold);">hello@mayree.co</a> and we'll respond within 24 hours.</p>
+  </div>
+</div>
+<footer class="main-footer">
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div><div class="ft-logo"><img src="/assets/logo.png" alt="MAYREE"/></div><p class="ft-desc">Luxury bags, curated and crafted.<br/>Lagos, Nigeria · Worldwide Shipping.</p></div>
+      <div><span class="ft-col-title">Shop</span><ul class="ft-links"><li><a href="/shop.html">The Edit</a></li><li><a href="/index.html#request">By Request</a></li></ul></div>
+      <div><span class="ft-col-title">Help</span><ul class="ft-links"><li><a href="/track.html">Track Order</a></li><li><a href="/shipping.html">Shipping</a></li><li><a href="/returns.html">Returns</a></li><li><a href="/faq.html">FAQs</a></li></ul></div>
+      <div><span class="ft-col-title">Account</span><ul class="ft-links"><li><a href="/login.html">Login</a></li><li><a href="/account.html">My Orders</a></li></ul></div>
+      <div><span class="ft-col-title">Connect</span><ul class="ft-links"><li><a href="https://instagram.com/mayree">Instagram</a></li><li><a href="https://wa.me/2348000000000">WhatsApp</a></li><li><a href="mailto:hello@mayree.co">Email</a></li></ul></div>
+    </div>
+    <div class="ft-bot"><span class="ft-copy">© 2025 Mayree. All rights reserved.</span></div>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script>
+updateCartBadge();updateNavAuth();
+document.getElementById('nav-toggle').addEventListener('click',()=>document.getElementById('nav-mobile').classList.add('open'));
+document.getElementById('nav-close').addEventListener('click',()=>document.getElementById('nav-mobile').classList.remove('open'));
+</script>
+</body>
+</html>
