@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/logo.png"/>
 </head>
 <body class="page-fade">
-<div id="auth-gate" style="position:fixed;inset:0;background:#FDFBF7;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;"><img src="/assets/logo.png" style="height:60px;opacity:.6;"/><div style="width:28px;height:28px;border:2px solid #EDE5D8;border-top-color:#C9A87A;border-radius:50%;animation:spin .8s linear infinite;"></div></div>
+</div>
 
 <div class="admin-layout">
   <aside class="admin-sidebar">
@@ -82,7 +82,7 @@
   let activeStatus = '';
 
   async function init() {
-    await requireAdmin();
+    
     allOrders = await adminFetchOrders();
     renderOrders(allOrders);
   }

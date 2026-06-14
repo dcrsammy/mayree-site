@@ -8,7 +8,7 @@
 <link rel="icon" href="/assets/logo.png"/>
 </head>
 <body class="page-fade">
-<div id="auth-gate" style="position:fixed;inset:0;background:#FDFBF7;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;"><img src="/assets/logo.png" style="height:60px;opacity:.6;"/><div style="width:28px;height:28px;border:2px solid #EDE5D8;border-top-color:#C9A87A;border-radius:50%;animation:spin .8s linear infinite;"></div></div>
+</div>
 
 <div class="admin-layout">
   <!-- SIDEBAR -->
@@ -102,7 +102,7 @@
   document.getElementById('admin-date').textContent = new Date().toLocaleDateString('en-NG', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 
   async function init() {
-    await requireAdmin();
+    
 
     // Load stats
     const [{ count: orderCount }, { data: orders }, { count: productCount }, { count: customerCount }] = await Promise.all([
