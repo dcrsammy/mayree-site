@@ -46,7 +46,8 @@ async function loadPageContent() {
     if (reqTitle && c.request_title) reqTitle.textContent = c.request_title;
     if (reqDesc && c.request_desc)   reqDesc.textContent  = c.request_desc;
     if (c.whatsapp_number) {
-      reqWa.forEach(a => {
+      // Update ALL WhatsApp links on the page
+      document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
         a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + c.whatsapp_number);
       });
     }

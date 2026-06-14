@@ -214,7 +214,8 @@ function openReqModal(id) {
   var p = allItems.find(function(x){ return x.id === id; });
   if (!p) return;
   var img = (p.images && p.images[0]) ? p.images[0] : '';
-  var wa = 'https://wa.me/2348000000000?text=' + encodeURIComponent('Hi Mayree, I\'d like to request: ' + p.name + '. Please send me a quote.');
+  var waNum = '2348000000000'; try { var _wc = JSON.parse(sessionStorage.getItem('mayree_content')||'{}'); if(_wc.whatsapp_number) waNum=_wc.whatsapp_number; } catch(e){}
+  var wa = 'https://wa.me/' + waNum + '?text=' + encodeURIComponent('Hi Mayree, I\'d like to request: ' + p.name + '. Please send me a quote.');
 
   document.getElementById('req-modal-body').innerHTML =
     (img ? '<img class="req-modal-img" src="' + img + '" alt="' + p.name + '"/>' : '') +
