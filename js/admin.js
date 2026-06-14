@@ -32,14 +32,16 @@ async function uploadProductImage(file) {
 
 async function saveProduct(formData, existingId = null) {
   const payload = {
-    name:        formData.name,
-    price:       parseFloat(formData.price),
-    old_price:   formData.old_price ? parseFloat(formData.old_price) : null,
-    description: formData.description || '',
-    category:    formData.category,
-    badge:       formData.badge || null,
-    active:      formData.active !== undefined ? formData.active : true,
-    updated_at:  new Date().toISOString(),
+    name:         formData.name,
+    price:        parseFloat(formData.price),
+    old_price:    formData.old_price ? parseFloat(formData.old_price) : null,
+    description:  formData.description || '',
+    category:     formData.category,
+    badge:        formData.badge || null,
+    active:       formData.active !== undefined ? formData.active : true,
+    product_type: formData.product_type || 'edit',
+    stock:        parseInt(formData.stock) || 1,
+    updated_at:   new Date().toISOString(),
   };
 
   // Upload new images if provided

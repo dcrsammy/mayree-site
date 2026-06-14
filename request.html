@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>By Request — MAYREE</title>
+<link rel="stylesheet" href="/css/mayree.css"/>
+<link rel="icon" href="/assets/logo.png"/>
+<style>
+.request-hero {
+  background: linear-gradient(145deg, #3D2B1F 0%, #2A1C12 100%);
+  padding: 80px 52px;
+  text-align: center;
+  color: var(--ivory);
+}
+.req-card { position: relative; background: var(--ivory); cursor: pointer; }
+.req-card .pimg { position: relative; overflow: hidden; aspect-ratio: 3/4; background: var(--beige); }
+.req-card .pimg img { width:100%; height:100%; object-fit:cover; transition: transform .55s ease; }
+.req-card:hover .pimg img { transform: scale(1.04); }
+.req-overlay {
+  position: absolute; inset: 0;
+  background: rgba(61,43,31,.65);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; transition: opacity .35s;
+}
+.req-card:hover .req-overlay { opacity: 1; }
+.req-btn {
+  background: var(--champagne); color: var(--ink);
+  border: none; padding: 13px 32px;
+  font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  cursor: pointer; font-family: 'Jost', sans-serif;
+  transition: background .25s;
+}
+.req-btn:hover { background: var(--gold); color: var(--ivory); }
+.req-info { padding: 14px 2px 6px; }
+.req-type { font-size: 9px; letter-spacing: 2.5px; text-transform: uppercase; color: var(--champagne); margin-bottom: 5px; }
+.req-name { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 400; letter-spacing: 1px; color: var(--ink); margin-bottom: 6px; }
+.req-price { font-size: 13px; color: var(--muted); }
+
+/* Modal */
+.req-modal-overlay { display:none; position:fixed; inset:0; background:rgba(26,18,8,.6); z-index:800; align-items:center; justify-content:center; }
+.req-modal-overlay.open { display:flex; }
+.req-modal { background:var(--ivory); max-width:560px; width:100%; padding:48px; position:relative; max-height:90vh; overflow-y:auto; }
+.req-modal-img { width:100%; aspect-ratio:3/4; object-fit:cover; margin-bottom:24px; background:var(--beige); }
+</style>
+</head>
+<body class="page-fade">
+
+<div class="announce">✦ &nbsp;Browse & request any piece · We source it for you &nbsp;✦</div>
+
+<nav class="main-nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/index.html" class="nav-link">Home</a>
+      <a href="/shop.html" class="nav-link">The Edit</a>
+      <a href="/request.html" class="nav-link" style="color:var(--gold);">By Request</a>
+    </div>
+    <div class="nav-logo"><a href="/index.html"><img src="/assets/logo.png" alt="MAYREE"/></a></div>
+    <div class="nav-right">
+      <a href="/login.html" class="nav-link" id="nav-login">Login</a>
+      <a href="/account.html" class="nav-link" id="nav-account" style="display:none">Account</a>
+      <button class="nav-icon" onclick="window.location='/wishlist.html'">♡</button>
+      <button class="nav-icon" onclick="window.location='/cart.html'" style="position:relative">🛍 <span class="cart-count" id="cart-badge">0</span></button>
+      <button class="nav-toggle" id="nav-toggle">☰</button>
+    </div>
+  </div>
+</nav>
+
+<div class="nav-mobile" id="nav-mobile">
+  <button class="nav-mobile-close" id="nav-close">✕</button>
+  <a href="/index.html">Home</a><a href="/shop.html">The Edit</a>
+  <a href="/request.html">By Request</a><a href="/cart.html">Cart</a><a href="/account.html">Account</a>
+</div>
+
+<!-- HERO -->
+<div class="request-hero">
+  <span class="ey" style="color:var(--champagne);">Stream II</span>
+  <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,58px);font-weight:300;letter-spacing:2px;margin-bottom:16px;">By Request</h1>
+  <p style="font-size:13px;color:rgba(253,251,247,.6);max-width:520px;margin:0 auto 32px;line-height:1.9;">Browse our request catalogue. See something you love? Click Request and we'll source it, handle the order, and deliver it directly to you.</p>
+  <div style="display:flex;gap:32px;justify-content:center;flex-wrap:wrap;">
+    <div style="text-align:center;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--champagne);">1</div>
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(253,251,247,.4);margin-top:4px;">Browse</div>
+    </div>
+    <div style="font-size:24px;color:rgba(201,168,122,.3);display:flex;align-items:center;">→</div>
+    <div style="text-align:center;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--champagne);">2</div>
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(253,251,247,.4);margin-top:4px;">Request</div>
+    </div>
+    <div style="font-size:24px;color:rgba(201,168,122,.3);display:flex;align-items:center;">→</div>
+    <div style="text-align:center;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--champagne);">3</div>
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(253,251,247,.4);margin-top:4px;">We Source</div>
+    </div>
+    <div style="font-size:24px;color:rgba(201,168,122,.3);display:flex;align-items:center;">→</div>
+    <div style="text-align:center;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;color:var(--champagne);">4</div>
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(253,251,247,.4);margin-top:4px;">Delivered</div>
+    </div>
+  </div>
+</div>
+
+<!-- CATALOGUE -->
+<div class="wrap sec">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px;">
+    <div>
+      <span class="ey">Browse the Catalogue</span>
+      <h2 class="sec-title" style="margin-top:4px;">Request Catalogue</h2>
+    </div>
+    <div style="display:flex;gap:12px;align-items:center;">
+      <input type="text" id="req-search" placeholder="Search catalogue..." oninput="filterCatalogue()" style="background:var(--cream);border:1px solid var(--border);padding:9px 14px;font-size:12px;font-family:'Jost',sans-serif;width:200px;outline:none;"/>
+      <select id="req-cat" onchange="filterCatalogue()" style="background:var(--cream);border:1px solid var(--border);padding:9px 14px;font-size:12px;font-family:'Jost',sans-serif;outline:none;">
+        <option value="">All Categories</option>
+        <option>Handbags</option><option>Shoulder Bags</option><option>Bucket Bags</option>
+        <option>Clutches</option><option>Crossbody</option><option>Accessories</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="prod-grid" id="request-grid">
+    <div class="loading-spinner"></div>
+  </div>
+
+  <!-- EMPTY STATE -->
+  <div id="request-empty" style="display:none;text-align:center;padding:80px 20px;">
+    <p style="font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--muted);margin-bottom:16px;">No items in the request catalogue yet</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:24px;">Have something specific in mind? Tell us directly.</p>
+    <a href="https://wa.me/2348000000000?text=Hi Mayree, I'd like to make a By Request order" target="_blank" class="btn btn-dark">WhatsApp Us Directly</a>
+  </div>
+</div>
+
+<!-- REQUEST MODAL -->
+<div class="req-modal-overlay" id="req-modal">
+  <div class="req-modal">
+    <button class="modal-close" onclick="closeReqModal()" style="position:absolute;top:16px;right:20px;background:none;border:none;font-size:22px;cursor:pointer;color:var(--muted);">✕</button>
+    <div id="req-modal-body"></div>
+  </div>
+</div>
+
+<footer class="main-footer">
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div><div class="ft-logo"><img src="/assets/logo.png" alt="MAYREE"/></div><p class="ft-desc">Luxury bags, curated and crafted.<br/>Lagos, Nigeria · Worldwide Shipping.</p></div>
+      <div><span class="ft-col-title">Shop</span><ul class="ft-links"><li><a href="/shop.html">The Edit</a></li><li><a href="/request.html">By Request</a></li></ul></div>
+      <div><span class="ft-col-title">Help</span><ul class="ft-links"><li><a href="/track.html">Track Order</a></li><li><a href="/shipping.html">Shipping</a></li><li><a href="/returns.html">Returns</a></li><li><a href="/faqs.html">FAQs</a></li></ul></div>
+      <div><span class="ft-col-title">Account</span><ul class="ft-links"><li><a href="/login.html">Login</a></li><li><a href="/account.html">My Orders</a></li></ul></div>
+      <div><span class="ft-col-title">Connect</span><ul class="ft-links"><li><a href="https://instagram.com/mayree">Instagram</a></li><li><a href="https://wa.me/2348000000000">WhatsApp</a></li><li><a href="mailto:hello@mayree.co">Email</a></li></ul></div>
+    </div>
+    <div class="ft-bot"><span class="ft-copy">© 2025 Mayree. All rights reserved.</span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/content.js"></script>
+<script>
+updateCartBadge();
+updateNavAuth();
+document.getElementById('nav-toggle').addEventListener('click', function(){ document.getElementById('nav-mobile').classList.add('open'); });
+document.getElementById('nav-close').addEventListener('click', function(){ document.getElementById('nav-mobile').classList.remove('open'); });
+
+var allItems = [];
+
+async function load() {
+  var result = await sb.from('products').select('*').eq('active', true).eq('product_type', 'request').order('created_at', {ascending: false});
+  allItems = result.data || [];
+  filterCatalogue();
+}
+
+function filterCatalogue() {
+  var q = (document.getElementById('req-search').value || '').toLowerCase();
+  var cat = document.getElementById('req-cat').value;
+  var filtered = allItems.filter(function(p) {
+    return (!q || p.name.toLowerCase().includes(q)) && (!cat || p.category === cat);
+  });
+  renderCatalogue(filtered);
+}
+
+function renderCatalogue(items) {
+  var grid = document.getElementById('request-grid');
+  var empty = document.getElementById('request-empty');
+
+  if (!items.length) {
+    grid.style.display = 'none';
+    empty.style.display = 'block';
+    return;
+  }
+  grid.style.display = 'grid';
+  empty.style.display = 'none';
+
+  grid.innerHTML = items.map(function(p) {
+    var img = (p.images && p.images[0]) ? p.images[0] : '';
+    return '<div class="req-card">' +
+      '<div class="pimg">' +
+        (img ? '<img src="' + img + '" alt="' + p.name + '" loading="lazy"/>' : '<div class="pimg-placeholder"></div>') +
+        '<div class="req-overlay">' +
+          '<button class="req-btn" onclick="openReqModal(\'' + p.id + '\')">Request This</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="req-info">' +
+        '<div class="req-type">By Request · ' + (p.category || 'Bag') + '</div>' +
+        '<div class="req-name">' + p.name + '</div>' +
+        '<div class="req-price">Starting from ' + fmt(p.price) + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function openReqModal(id) {
+  var p = allItems.find(function(x){ return x.id === id; });
+  if (!p) return;
+  var img = (p.images && p.images[0]) ? p.images[0] : '';
+  var wa = 'https://wa.me/2348000000000?text=' + encodeURIComponent('Hi Mayree, I\'d like to request: ' + p.name + '. Please send me a quote.');
+
+  document.getElementById('req-modal-body').innerHTML =
+    (img ? '<img class="req-modal-img" src="' + img + '" alt="' + p.name + '"/>' : '') +
+    '<span style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--champagne);">By Request</span>' +
+    '<h2 style="font-family:\'Cormorant Garamond\',serif;font-size:28px;font-weight:400;margin:10px 0 8px;letter-spacing:1px;">' + p.name + '</h2>' +
+    '<p style="font-size:13px;color:var(--muted);margin-bottom:6px;">Category: ' + (p.category || '—') + '</p>' +
+    '<p style="font-size:15px;color:var(--ink);margin-bottom:16px;">Starting from <strong>' + fmt(p.price) + '</strong></p>' +
+    '<p style="font-size:13px;line-height:1.9;color:var(--muted);margin-bottom:28px;">' + (p.description || 'A carefully curated piece available by request. We will source it, handle the order, and deliver it directly to you.') + '</p>' +
+    '<div style="background:var(--cream);padding:16px;margin-bottom:24px;font-size:12px;color:var(--muted);line-height:1.8;">' +
+      '<strong style="color:var(--ink);">How it works:</strong><br/>' +
+      '1. Click the button below to WhatsApp us<br/>' +
+      '2. We confirm availability and send you a quote<br/>' +
+      '3. You pay and we handle the rest<br/>' +
+      '4. Your bag arrives at your door' +
+    '</div>' +
+    '<a href="' + wa + '" target="_blank" class="btn btn-dark btn-full" style="display:block;text-align:center;margin-bottom:12px;">Request This Bag</a>' +
+    '<button onclick="closeReqModal()" class="btn btn-ghost btn-full" style="width:100%;">Continue Browsing</button>';
+
+  document.getElementById('req-modal').classList.add('open');
+}
+
+function closeReqModal() {
+  document.getElementById('req-modal').classList.remove('open');
+}
+
+// Close on outside click
+document.getElementById('req-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeReqModal();
+});
+
+load();
+</script>
+</body>
+</html>

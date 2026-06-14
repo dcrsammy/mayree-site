@@ -1,7 +1,7 @@
 // ─── SHOP ────────────────────────────────────────────────────
 
 async function fetchProducts(filters = {}) {
-  let query = sb.from('products').select('*').eq('active', true);
+  let query = sb.from('products').select('*').eq('active', true).eq('product_type', 'edit');
 
   if (filters.category) query = query.eq('category', filters.category);
   if (filters.search) query = query.ilike('name', `%${filters.search}%`);

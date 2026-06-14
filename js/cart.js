@@ -21,19 +21,30 @@ function updateCartBadge() {
 function addToCart(product, qty = 1) {
   const cart = getCart();
   const idx = cart.findIndex(i => i.id === product.id);
+  const stock = product.stock || 999;
   if (idx > -1) {
-    cart[idx].qty += qty;
+    const newQty = cart[idx].qty + qty;
+    if (newQty > stock) {
+      showToast('Only ' + stock + ' available in stock', 'error');
+      return;
+    }
+    cart[idx].qty = newQty;
   } else {
+    if (qty > stock) {
+      showToast('Only ' + stock + ' available in stock', 'error');
+      return;
+    }
     cart.push({
       id: product.id,
       name: product.name,
       price: product.price,
       image: product.images?.[0] || '',
+      stock: stock,
       qty
     });
   }
   saveCart(cart);
-  showToast(`${product.name} added to cart ✓`);
+  showToast(product.name + ' added to cart ✓');
 }
 
 function removeFromCart(id) {
@@ -45,8 +56,16 @@ function updateQty(id, qty) {
   const cart = getCart();
   const idx = cart.findIndex(i => i.id === id);
   if (idx > -1) {
-    if (qty < 1) { cart.splice(idx, 1); }
-    else { cart[idx].qty = qty; }
+    if (qty < 1) {
+      cart.splice(idx, 1);
+    } else {
+      const stock = cart[idx].stock || 999;
+      if (qty > stock) {
+        showToast('Only ' + stock + ' available in stock', 'error');
+        return;
+      }
+      cart[idx].qty = qty;
+    }
   }
   saveCart(cart);
 }

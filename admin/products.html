@@ -221,6 +221,19 @@
         </select>
       </div>
     </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Product Type *</label>
+        <select id="f-type" class="form-control">
+          <option value="edit">The Edit — Buy Now</option>
+          <option value="request">By Request — Browse Only</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Stock Quantity <span style="font-size:10px;color:var(--muted);">admin only, not shown to customers</span></label>
+        <input type="number" id="f-stock" class="form-control" placeholder="1" min="0" value="1"/>
+      </div>
+    </div>
 
     <!-- DESCRIPTION -->
     <div class="form-group">
@@ -365,6 +378,7 @@ function renderGrid(products) {
           ${fmt(p.price)}
           ${p.old_price ? `<span class="pac-price-old">${fmt(p.old_price)}</span>` : ''}
         </div>
+        <div style="font-size:10px;color:var(--muted);margin-bottom:8px;letter-spacing:1px;">📦 Stock: <strong style="color:var(--ink);">' + (p.stock||0) + '</strong> &nbsp;·&nbsp; <span style="color:' + (p.product_type==='request'?'var(--mocha)':'var(--success)') + ';">' + (p.product_type==='request'?'By Request':'The Edit') + '</span></div>
         <div class="pac-actions">
           <button class="btn btn-ghost btn-sm" onclick="openEditModal('${p.id}')">Edit</button>
           <div class="pac-status-toggle" onclick="quickToggleActive('${p.id}', ${!p.active})">
