@@ -204,7 +204,7 @@ function renderCatalogue(items) {
       '<div class="req-info">' +
         '<div class="req-type">By Request · ' + (p.category || 'Bag') + '</div>' +
         '<div class="req-name">' + p.name + '</div>' +
-        '<div class="req-price">Starting from ' + fmt(p.price) + '</div>' +
+        '<div class="req-type" style="margin-top:4px;">By Request · Contact for price</div>' +
       '</div>' +
     '</div>';
   }).join('');
@@ -215,14 +215,12 @@ function openReqModal(id) {
   if (!p) return;
   var img = (p.images && p.images[0]) ? p.images[0] : '';
   var waNum = '639565885843'; try { var _wc = JSON.parse(sessionStorage.getItem('mayree_content')||'{}'); if(_wc.whatsapp_number) waNum=_wc.whatsapp_number; } catch(e){}
-  var productLink = window.location.origin + '/product.html?id=' + p.id;
-  var imgLink = (p.images && p.images[0]) ? p.images[0] : '';
+  var productLink = window.location.origin + '/request.html';
   var waMsg = 'Hi Mayree! I would like to request this bag:%0A%0A' +
     '*' + p.name + '*%0A' +
-    'Category: ' + (p.category||'') + '%0A' +
-    'Starting from: ' + fmt(p.price) + '%0A%0A' +
-    (imgLink ? 'Image: ' + imgLink + '%0A%0A' : '') +
-    'Please send me a quote and availability. Thank you!';
+    'Category: ' + (p.category||'') + '%0A%0A' +
+    'Please send me a quote and availability.%0A%0A' +
+    'Seen on: ' + productLink;
   var wa = 'https://wa.me/' + waNum + '?text=' + waMsg;
 
   document.getElementById('req-modal-body').innerHTML =
@@ -230,7 +228,7 @@ function openReqModal(id) {
     '<span style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--champagne);">By Request</span>' +
     '<h2 style="font-family:\'Cormorant Garamond\',serif;font-size:28px;font-weight:400;margin:10px 0 8px;letter-spacing:1px;">' + p.name + '</h2>' +
     '<p style="font-size:13px;color:var(--muted);margin-bottom:6px;">Category: ' + (p.category || '—') + '</p>' +
-    '<p style="font-size:15px;color:var(--ink);margin-bottom:16px;">Starting from <strong>' + fmt(p.price) + '</strong></p>' +
+    '<p style="font-size:12px;color:var(--muted);margin-bottom:16px;letter-spacing:1px;">Contact us for pricing & availability</p>' +
     '<p style="font-size:13px;line-height:1.9;color:var(--muted);margin-bottom:28px;">' + (p.description || 'A carefully curated piece available by request. We will source it, handle the order, and deliver it directly to you.') + '</p>' +
     '<div style="background:var(--cream);padding:16px;margin-bottom:24px;font-size:12px;color:var(--muted);line-height:1.8;">' +
       '<strong style="color:var(--ink);">How it works:</strong><br/>' +
