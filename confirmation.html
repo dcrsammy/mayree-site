@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Order Confirmed — MAYREE</title>
+<link rel="stylesheet" href="/css/mayree.css"/>
+<link rel="icon" href="/assets/logo.png"/>
+</head>
+<body>
+
+<nav class="main-nav">
+  <div class="nav-inner">
+    <div class="nav-left"></div>
+    <div class="nav-logo"><a href="/index.html"><img src="/assets/logo.png" alt="MAYREE"/></a></div>
+    <div class="nav-right"><a href="/account.html" class="nav-link">My Account</a></div>
+  </div>
+</nav>
+
+<div style="max-width:680px;margin:80px auto;padding:0 28px;text-align:center;">
+  <div style="font-size:64px;margin-bottom:24px;">✦</div>
+  <span class="ey">Order Confirmed</span>
+  <h1 style="font-family:'Cormorant Garamond',serif;font-size:clamp(32px,5vw,52px);font-weight:300;letter-spacing:2px;color:var(--ink);margin-bottom:16px;">Thank You, <span id="customer-name">Beautiful</span></h1>
+  <p style="font-size:14px;line-height:1.9;color:var(--muted);margin-bottom:8px;">Your order has been received and is being prepared with care.</p>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:40px;">A confirmation email is on its way to your inbox.</p>
+
+  <div style="background:var(--cream);padding:32px;margin-bottom:40px;border:1px solid var(--border);">
+    <div style="display:flex;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:12px;">
+      <div style="text-align:left;">
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Order Reference</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;" id="order-ref">—</div>
+      </div>
+      <div style="text-align:left;">
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Status</div>
+        <div style="font-size:13px;color:var(--success);font-weight:400;letter-spacing:1px;">✓ Payment Confirmed</div>
+      </div>
+      <div style="text-align:left;">
+        <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Estimated Delivery</div>
+        <div style="font-size:13px;font-weight:400;" id="delivery-date">2–5 business days</div>
+      </div>
+    </div>
+    <div id="order-items"></div>
+    <div style="border-top:1px solid var(--border);margin-top:16px;padding-top:16px;display:flex;justify-content:space-between;">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:18px;">Total Paid</span>
+      <span style="font-family:'Cormorant Garamond',serif;font-size:20px;" id="order-total">—</span>
+    </div>
+  </div>
+
+  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:48px;">
+    <a href="/track.html" class="btn btn-dark">Track My Order</a>
+    <a href="/shop.html" class="btn btn-ghost">Continue Shopping</a>
+  </div>
+
+  <div style="background:var(--rose);padding:28px;margin-bottom:40px;">
+    <p style="font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;color:var(--brown);margin-bottom:8px;">"Every piece is curated with intention. We hope you love yours."</p>
+    <p style="font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--champagne);">— Mayree</p>
+  </div>
+
+  <div style="border-top:1px solid var(--border);padding-top:28px;">
+    <p style="font-size:12px;color:var(--muted);margin-bottom:12px;">Questions about your order?</p>
+    <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+      <a href="https://wa.me/2348000000000" target="_blank" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold);padding-bottom:2px;">WhatsApp Us</a>
+      <a href="mailto:hello@mayree.co" style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);border-bottom:1px solid var(--gold);padding-bottom:2px;">Email Us</a>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script>
+  async function loadConfirmation() {
+    const ref = getParam('ref');
+    const orderId = getParam('order');
+
+    if (!ref) { window.location.href = '/index.html'; return; }
+
+    document.getElementById('order-ref').textContent = ref;
+
+    if (orderId) {
+      const { data: order } = await sb.from('orders').select('*').eq('id', orderId).single();
+      if (order) {
+        const name = order.shipping_address?.firstName || 'Beautiful';
+        document.getElementById('customer-name').textContent = name;
+        document.getElementById('order-total').textContent = fmt(order.total);
+
+        if (order.items) {
+          document.getElementById('order-items').innerHTML = order.items.map(item => `
+            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;">
+              <span>${item.name} × ${item.qty}</span>
+              <span>${fmt(item.price * item.qty)}</span>
+            </div>
+          `).join('');
+        }
+      }
+    }
+
+    // Estimate delivery date
+    const d = new Date();
+    d.setDate(d.getDate() + 5);
+    document.getElementById('delivery-date').textContent = d.toLocaleDateString('en-NG', { weekday: 'long', month: 'long', day: 'numeric' });
+  }
+
+  loadConfirmation();
+</script>
+</body>
+</html>

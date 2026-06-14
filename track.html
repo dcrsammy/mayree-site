@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Track Order — MAYREE</title>
+<link rel="stylesheet" href="/css/mayree.css"/>
+<link rel="icon" href="/assets/logo.png"/>
+<style>
+.track-wrap { max-width: 680px; margin: 0 auto; padding: 52px 28px 80px; }
+.track-steps { display: flex; flex-direction: column; gap: 0; margin: 40px 0; }
+.track-step { display: flex; gap: 20px; position: relative; }
+.track-step:not(:last-child)::after { content: ''; position: absolute; left: 19px; top: 40px; bottom: -20px; width: 2px; background: var(--border); z-index: 0; }
+.track-step.done:not(:last-child)::after { background: var(--champagne); }
+.step-icon { width: 40px; height: 40px; border-radius: 50%; border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 14px; flex-shrink: 0; background: var(--ivory); z-index: 1; color: var(--muted); }
+.track-step.done .step-icon { border-color: var(--champagne); color: var(--champagne); background: rgba(201,168,122,.1); }
+.track-step.current .step-icon { border-color: var(--gold); color: var(--gold); background: rgba(168,120,64,.1); }
+.step-content { padding: 8px 0 28px; }
+.step-title { font-size: 13px; font-weight: 400; color: var(--ink); margin-bottom: 4px; }
+.track-step.done .step-title { color: var(--mocha); }
+.track-step.current .step-title { color: var(--gold); font-weight: 500; }
+.step-desc { font-size: 12px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="announce">✦ &nbsp;Questions? WhatsApp us anytime &nbsp;✦</div>
+<nav class="main-nav">
+  <div class="nav-inner">
+    <div class="nav-left"><a href="/index.html" class="nav-link">Home</a><a href="/shop.html" class="nav-link">The Edit</a></div>
+    <div class="nav-logo"><a href="/index.html"><img src="/assets/logo.png" alt="MAYREE"/></a></div>
+    <div class="nav-right">
+      <a href="/account.html" class="nav-link" id="nav-account" style="display:none">Account</a>
+      <button class="nav-icon" onclick="window.location='/cart.html'" style="position:relative">🛍 <span class="cart-count" id="cart-badge">0</span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <span class="ey">Where's My Order?</span>
+  <h1 class="sec-title">Track Order</h1>
+  <div class="rule"></div>
+</div>
+
+<div class="track-wrap">
+  <!-- Search -->
+  <div style="background:var(--cream);padding:32px;border:1px solid var(--border);margin-bottom:32px;">
+    <div class="form-group">
+      <label class="form-label">Order Reference Number</label>
+      <div style="display:flex;gap:0;">
+        <input type="text" id="track-ref" class="form-control" placeholder="e.g. MAY-1234567890" style="border-right:none;"/>
+        <button onclick="trackOrder()" class="btn btn-dark" style="white-space:nowrap;padding:13px 24px;">Track</button>
+      </div>
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:4px;">Find your reference number in your order confirmation email or <a href="/account.html" style="color:var(--champagne);">My Account</a>.</p>
+  </div>
+
+  <!-- Result -->
+  <div id="track-result" style="display:none;">
+    <div style="background:var(--cream);padding:28px;border:1px solid var(--border);margin-bottom:28px;">
+      <div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;">
+        <div>
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Order Reference</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:20px;" id="tr-ref"></div>
+        </div>
+        <div>
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Order Date</div>
+          <div style="font-size:13px;" id="tr-date"></div>
+        </div>
+        <div>
+          <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;">Total</div>
+          <div style="font-size:15px;" id="tr-total"></div>
+        </div>
+      </div>
+      <div id="tr-items"></div>
+    </div>
+
+    <!-- Tracking Steps -->
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;margin-bottom:4px;">Delivery Status</h3>
+    <div id="track-steps" class="track-steps"></div>
+
+    <div style="text-align:center;margin-top:32px;padding:24px;background:var(--rose);">
+      <p style="font-size:13px;color:var(--mocha);margin-bottom:12px;">Need help with your order?</p>
+      <a href="https://wa.me/2348000000000" target="_blank" class="btn btn-dark btn-sm">WhatsApp Us</a>
+    </div>
+  </div>
+
+  <div id="track-not-found" style="display:none;text-align:center;padding:40px 20px;">
+    <p style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--muted);margin-bottom:16px;">Order not found</p>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:24px;">Please check your reference number and try again.</p>
+    <a href="https://wa.me/2348000000000" class="btn btn-ghost btn-sm">Contact Support</a>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script>
+  updateCartBadge(); updateNavAuth();
+
+  // Check URL param
+  const urlRef = getParam('ref');
+  if (urlRef) { document.getElementById('track-ref').value = urlRef; trackOrder(); }
+
+  async function trackOrder() {
+    const ref = document.getElementById('track-ref').value.trim();
+    if (!ref) { showToast('Please enter an order reference', 'error'); return; }
+
+    const { data: order } = await sb.from('orders').select('*').eq('reference', ref).single();
+    
+    document.getElementById('track-result').style.display = 'none';
+    document.getElementById('track-not-found').style.display = 'none';
+
+    if (!order) { document.getElementById('track-not-found').style.display = 'block'; return; }
+
+    document.getElementById('tr-ref').textContent = order.reference;
+    document.getElementById('tr-date').textContent = new Date(order.created_at).toLocaleDateString('en-NG', { year:'numeric', month:'long', day:'numeric' });
+    document.getElementById('tr-total').textContent = fmt(order.total);
+
+    const items = order.items || [];
+    document.getElementById('tr-items').innerHTML = items.map(item => `
+      <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px;">
+        <span>${item.name} × ${item.qty}</span>
+        <span>${fmt(item.price * item.qty)}</span>
+      </div>`).join('');
+
+    const steps = [
+      { key: 'pending',    icon: '📋', title: 'Order Received',   desc: 'Your order has been placed and confirmed.' },
+      { key: 'paid',       icon: '✅', title: 'Payment Confirmed', desc: 'Payment received. Your order is being prepared.' },
+      { key: 'processing', icon: '📦', title: 'Being Packaged',   desc: 'Your bag is being carefully packaged with love.' },
+      { key: 'shipped',    icon: '🚚', title: 'Out for Delivery',  desc: 'Your order is on its way to you.' },
+      { key: 'delivered',  icon: '🎀', title: 'Delivered',         desc: 'Your Mayree piece has arrived. Enjoy!' }
+    ];
+
+    const statusOrder = ['pending','paid','processing','shipped','delivered'];
+    const currentIdx = statusOrder.indexOf(order.status);
+
+    document.getElementById('track-steps').innerHTML = steps.map((step, i) => {
+      const done = i < currentIdx;
+      const current = i === currentIdx;
+      const cls = done ? 'done' : (current ? 'current' : '');
+      return `
+        <div class="track-step ${cls}">
+          <div class="step-icon">${step.icon}</div>
+          <div class="step-content">
+            <div class="step-title">${step.title}</div>
+            <div class="step-desc">${done || current ? step.desc : '—'}</div>
+          </div>
+        </div>`;
+    }).join('');
+
+    document.getElementById('track-result').style.display = 'block';
+  }
+</script>
+</body>
+</html>

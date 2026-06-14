@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>My Account — MAYREE</title>
+<link rel="stylesheet" href="/css/mayree.css"/>
+<link rel="icon" href="/assets/logo.png"/>
+<style>
+.order-card { background: var(--ivory); border: 1px solid var(--border); margin-bottom: 16px; padding: 24px; }
+.order-header { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
+.order-ref { font-family: 'Cormorant Garamond', serif; font-size: 18px; font-weight: 400; }
+.order-date { font-size: 11px; color: var(--muted); margin-top: 4px; letter-spacing: 1px; }
+.order-item-row { display: flex; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--border); align-items: center; }
+.order-item-img { width: 52px; height: 64px; object-fit: cover; background: var(--beige); flex-shrink: 0; }
+.order-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 16px; flex-wrap: wrap; gap: 12px; }
+</style>
+</head>
+<body>
+
+<div class="announce">✦ &nbsp;Welcome to Mayree &nbsp;✦</div>
+
+<nav class="main-nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/index.html" class="nav-link">Home</a>
+      <a href="/shop.html" class="nav-link">The Edit</a>
+    </div>
+    <div class="nav-logo"><a href="/index.html"><img src="/assets/logo.png" alt="MAYREE"/></a></div>
+    <div class="nav-right">
+      <button class="nav-icon" onclick="window.location='/wishlist.html'">♡</button>
+      <button class="nav-icon" onclick="window.location='/cart.html'" style="position:relative">🛍 <span class="cart-count" id="cart-badge">0</span></button>
+      <button class="nav-toggle" id="nav-toggle">☰</button>
+    </div>
+  </div>
+</nav>
+
+<div class="nav-mobile" id="nav-mobile">
+  <button class="nav-mobile-close" id="nav-close">✕</button>
+  <a href="/index.html">Home</a><a href="/shop.html">Shop</a>
+  <a href="/wishlist.html">Wishlist</a><a href="/cart.html">Cart</a>
+</div>
+
+<div class="page-header">
+  <span class="ey">Your Space</span>
+  <h1 class="sec-title">My Account</h1>
+  <div class="rule"></div>
+</div>
+
+<div class="account-layout">
+  <!-- SIDEBAR -->
+  <aside>
+    <div style="text-align:center;margin-bottom:32px;">
+      <div style="width:72px;height:72px;border-radius:50%;background:var(--champagne);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--ivory);" id="avatar-initials">M</div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:18px;" id="user-name">Loading...</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:4px;" id="user-email"></div>
+    </div>
+    <a href="#orders" class="account-nav-link active" onclick="showTab('orders',this)">My Orders</a>
+    <a href="#profile" class="account-nav-link" onclick="showTab('profile',this)">Profile & Address</a>
+    <a href="#wishlist" class="account-nav-link" onclick="showTab('wishlist-tab',this)">Wishlist</a>
+    <a href="/track.html" class="account-nav-link">Track Order</a>
+    <a href="#" class="account-nav-link" onclick="logout()" style="color:var(--error);">Sign Out</a>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+    <!-- ORDERS TAB -->
+    <div id="tab-orders">
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;margin-bottom:28px;">My Orders</h2>
+      <div id="orders-list"><div class="loading-spinner"></div></div>
+    </div>
+
+    <!-- PROFILE TAB -->
+    <div id="tab-profile" style="display:none;">
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;margin-bottom:28px;">Profile & Address</h2>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input type="text" id="p-first" class="form-control"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input type="text" id="p-last" class="form-control"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" id="p-email" class="form-control" disabled style="opacity:.6;"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone</label>
+        <input type="tel" id="p-phone" class="form-control"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Delivery Address</label>
+        <textarea id="p-address" class="form-control" rows="3"></textarea>
+      </div>
+      <div style="margin-top:8px;">
+        <button class="btn btn-dark" onclick="saveProfile()">Save Changes</button>
+      </div>
+      <div style="margin-top:40px;padding-top:32px;border-top:1px solid var(--border);">
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;margin-bottom:20px;">Change Password</h3>
+        <div class="form-group">
+          <label class="form-label">New Password</label>
+          <input type="password" id="new-password" class="form-control" placeholder="Min. 8 characters"/>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="changePassword()">Update Password</button>
+      </div>
+    </div>
+
+    <!-- WISHLIST TAB -->
+    <div id="tab-wishlist-tab" style="display:none;">
+      <h2 style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;margin-bottom:28px;">My Wishlist</h2>
+      <div class="prod-grid" id="wishlist-grid"></div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/shop.js"></script>
+<script>
+  updateCartBadge();
+  document.getElementById('nav-toggle').addEventListener('click', () => document.getElementById('nav-mobile').classList.add('open'));
+  document.getElementById('nav-close').addEventListener('click', () => document.getElementById('nav-mobile').classList.remove('open'));
+
+  let currentUser = null;
+
+  function showTab(tabId, linkEl) {
+    document.querySelectorAll('[id^="tab-"]').forEach(t => t.style.display = 'none');
+    document.getElementById('tab-' + tabId).style.display = 'block';
+    document.querySelectorAll('.account-nav-link').forEach(a => a.classList.remove('active'));
+    if (linkEl) linkEl.classList.add('active');
+    if (tabId === 'wishlist-tab') renderWishlistTab();
+  }
+
+  async function init() {
+    currentUser = await requireAuth();
+    document.getElementById('user-email').textContent = currentUser.email;
+
+    const { data: profile } = await sb.from('profiles').select('*').eq('id', currentUser.id).single();
+    if (profile) {
+      const name = profile.full_name || currentUser.email.split('@')[0];
+      document.getElementById('user-name').textContent = name;
+      document.getElementById('avatar-initials').textContent = name.charAt(0).toUpperCase();
+
+      const parts = (profile.full_name || '').split(' ');
+      document.getElementById('p-first').value = parts[0] || '';
+      document.getElementById('p-last').value = parts[1] || '';
+      document.getElementById('p-email').value = currentUser.email;
+      document.getElementById('p-phone').value = profile.phone || '';
+      document.getElementById('p-address').value = profile.address || '';
+    }
+
+    loadOrders();
+  }
+
+  async function loadOrders() {
+    const { data: orders } = await sb.from('orders').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+    const container = document.getElementById('orders-list');
+
+    if (!orders || !orders.length) {
+      container.innerHTML = `
+        <div class="empty-state">
+          <p style="margin-bottom:20px;">You haven't placed any orders yet.</p>
+          <a href="/shop.html" class="btn btn-dark btn-sm">Shop The Edit</a>
+        </div>`;
+      return;
+    }
+
+    const statusColors = { pending:'#C9A87A', paid:'#4CAF50', processing:'#2196F3', shipped:'#9C27B0', delivered:'#388E3C', cancelled:'#F44336' };
+
+    container.innerHTML = orders.map(order => {
+      const items = order.items || [];
+      const statusColor = statusColors[order.status] || '#999';
+      const date = new Date(order.created_at).toLocaleDateString('en-NG', { year:'numeric', month:'long', day:'numeric' });
+
+      return `
+        <div class="order-card">
+          <div class="order-header">
+            <div>
+              <div class="order-ref">${order.reference}</div>
+              <div class="order-date">${date}</div>
+            </div>
+            <span style="background:${statusColor};color:white;padding:5px 14px;font-size:9px;letter-spacing:2px;text-transform:uppercase;">${order.status}</span>
+          </div>
+          ${items.map(item => `
+            <div class="order-item-row">
+              <img class="order-item-img" src="${item.image || ''}" alt="${item.name}" onerror="this.style.background='#EDE5D8'"/>
+              <div style="flex:1;">
+                <div style="font-family:'Cormorant Garamond',serif;font-size:16px;">${item.name}</div>
+                <div style="font-size:11px;color:var(--muted);">Qty: ${item.qty}</div>
+              </div>
+              <div style="font-size:14px;">${fmt(item.price * item.qty)}</div>
+            </div>
+          `).join('')}
+          <div class="order-footer">
+            <div style="font-family:'Cormorant Garamond',serif;font-size:18px;">Total: ${fmt(order.total)}</div>
+            <div style="display:flex;gap:10px;">
+              <a href="/track.html?ref=${order.reference}" class="btn btn-ghost btn-sm">Track Order</a>
+              ${order.status === 'delivered' ? '<button class="btn btn-gold btn-sm">Leave Review</button>' : ''}
+            </div>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  async function saveProfile() {
+    const first = document.getElementById('p-first').value;
+    const last = document.getElementById('p-last').value;
+    const phone = document.getElementById('p-phone').value;
+    const address = document.getElementById('p-address').value;
+
+    const { error } = await sb.from('profiles').upsert({
+      id: currentUser.id,
+      email: currentUser.email,
+      full_name: `${first} ${last}`.trim(),
+      phone,
+      address
+    });
+    if (error) { showToast('Failed to save', 'error'); return; }
+    showToast('Profile saved ✓');
+    document.getElementById('user-name').textContent = `${first} ${last}`.trim();
+  }
+
+  async function changePassword() {
+    const pw = document.getElementById('new-password').value;
+    if (pw.length < 8) { showToast('Password too short', 'error'); return; }
+    const { error } = await sb.auth.updateUser({ password: pw });
+    if (error) { showToast(error.message, 'error'); return; }
+    showToast('Password updated ✓');
+    document.getElementById('new-password').value = '';
+  }
+
+  function renderWishlistTab() {
+    const list = getWishlist();
+    const grid = document.getElementById('wishlist-grid');
+    if (!list.length) {
+      grid.innerHTML = `<p class="empty-state">Your wishlist is empty. <a href="/shop.html" style="color:var(--gold);">Browse The Edit →</a></p>`;
+      return;
+    }
+    grid.innerHTML = list.map(p => `
+      <div class="pcard">
+        <div class="pimg">
+          ${p.images?.[0] ? `<img src="${p.images[0]}" alt="${p.name}"/>` : '<div class="pimg-placeholder"></div>'}
+          <div class="pactions">
+            <button class="padd" onclick="addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')})">Add to Cart</button>
+            <button class="pwish active" onclick="toggleWishlist(${JSON.stringify(p).replace(/"/g,'&quot;')});renderWishlistTab();">♥</button>
+          </div>
+        </div>
+        <div class="pinfo">
+          <div class="ptype">The Edit</div>
+          <div class="pname">${p.name}</div>
+          <div class="pprice-row"><span class="pprice">${fmt(p.price)}</span></div>
+        </div>
+        <a class="pcard-link" href="/product.html?id=${p.id}"></a>
+      </div>`).join('');
+  }
+
+  init();
+</script>
+</body>
+</html>

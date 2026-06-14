@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cart — MAYREE</title>
+<link rel="stylesheet" href="/css/mayree.css"/>
+<link rel="icon" href="/assets/logo.png"/>
+</head>
+<body>
+
+<div class="announce">✦ &nbsp;Free shipping on orders over ₦80,000 &nbsp;✦</div>
+
+<nav class="main-nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/index.html" class="nav-link">Home</a>
+      <a href="/shop.html" class="nav-link">The Edit</a>
+    </div>
+    <div class="nav-logo"><a href="/index.html"><img src="/assets/logo.png" alt="MAYREE"/></a></div>
+    <div class="nav-right">
+      <a href="/login.html" class="nav-link" id="nav-login">Login</a>
+      <a href="/account.html" class="nav-link" id="nav-account" style="display:none">Account</a>
+      <button class="nav-icon" onclick="window.location='/wishlist.html'">♡</button>
+      <button class="nav-icon" style="position:relative">🛍 <span class="cart-count" id="cart-badge">0</span></button>
+      <button class="nav-toggle" id="nav-toggle">☰</button>
+    </div>
+  </div>
+</nav>
+
+<div class="nav-mobile" id="nav-mobile">
+  <button class="nav-mobile-close" id="nav-close">✕</button>
+  <a href="/index.html">Home</a><a href="/shop.html">Shop</a><a href="/account.html">Account</a>
+</div>
+
+<div class="page-header">
+  <span class="ey">Your Selection</span>
+  <h1 class="sec-title">Shopping Cart</h1>
+  <div class="rule"></div>
+</div>
+
+<div class="wrap" style="padding-top:52px;padding-bottom:80px;">
+  <div id="cart-empty" style="display:none;text-align:center;padding:80px 20px;">
+    <p style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--muted);margin-bottom:24px;">Your cart is empty</p>
+    <a href="/shop.html" class="btn btn-dark">Continue Shopping</a>
+  </div>
+
+  <div id="cart-content" style="display:grid;grid-template-columns:1fr 360px;gap:48px;align-items:start;">
+    <div>
+      <table class="cart-table">
+        <thead>
+          <tr>
+            <th style="width:100px;">Item</th>
+            <th></th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="cart-items"></tbody>
+      </table>
+      <div style="display:flex;justify-content:space-between;margin-top:24px;flex-wrap:wrap;gap:12px;">
+        <a href="/shop.html" class="btn btn-ghost btn-sm">← Continue Shopping</a>
+        <button onclick="clearCart();renderCart();" class="btn btn-ghost btn-sm">Clear Cart</button>
+      </div>
+    </div>
+
+    <div class="order-summary">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;margin-bottom:20px;letter-spacing:1px;">Order Summary</h3>
+      <div class="summary-row"><span>Subtotal</span><span id="summary-subtotal">₦0</span></div>
+      <div class="summary-row"><span>Shipping</span><span id="summary-shipping">Calculated at checkout</span></div>
+      <div class="summary-row"><span>Discount</span><span>—</span></div>
+      <div class="summary-total"><span>Total</span><span id="summary-total">₦0</span></div>
+      <div style="margin-top:24px;">
+        <input id="promo-input" class="form-control" placeholder="Promo code" style="margin-bottom:10px;"/>
+        <button onclick="applyPromo()" class="btn btn-ghost btn-sm btn-full" style="margin-bottom:20px;">Apply Code</button>
+        <button onclick="goCheckout()" class="btn btn-dark btn-full" id="checkout-btn">Proceed to Checkout</button>
+      </div>
+      <div style="margin-top:20px;text-align:center;">
+        <div style="font-size:10px;color:var(--muted);letter-spacing:1px;margin-bottom:8px;">We accept</div>
+        <div style="display:flex;gap:8px;justify-content:center;">
+          <span class="pay">Paystack</span><span class="pay">Visa</span><span class="pay">Mastercard</span><span class="pay">Transfer</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="main-footer">
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div><div class="ft-logo"><img src="/assets/logo.png" alt="MAYREE"/></div><p class="ft-desc">Luxury bags, curated and crafted.</p></div>
+      <div><span class="ft-col-title">Shop</span><ul class="ft-links"><li><a href="/shop.html">The Edit</a></li></ul></div>
+      <div><span class="ft-col-title">Help</span><ul class="ft-links"><li><a href="/track.html">Track Order</a></li><li><a href="#">Returns</a></li></ul></div>
+      <div><span class="ft-col-title">Account</span><ul class="ft-links"><li><a href="/login.html">Login</a></li></ul></div>
+      <div><span class="ft-col-title">Connect</span><ul class="ft-links"><li><a href="https://wa.me/2348000000000">WhatsApp</a></li></ul></div>
+    </div>
+    <div class="ft-bot"><span class="ft-copy">© 2025 Mayree.</span></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script>
+  updateCartBadge();
+  updateNavAuth();
+  document.getElementById('nav-toggle').addEventListener('click', () => document.getElementById('nav-mobile').classList.add('open'));
+  document.getElementById('nav-close').addEventListener('click', () => document.getElementById('nav-mobile').classList.remove('open'));
+
+  function renderCart() {
+    const cart = getCart();
+    const empty = document.getElementById('cart-empty');
+    const content = document.getElementById('cart-content');
+
+    if (!cart.length) {
+      empty.style.display = 'block';
+      content.style.display = 'none';
+      return;
+    }
+    empty.style.display = 'none';
+    content.style.display = 'grid';
+
+    const tbody = document.getElementById('cart-items');
+    tbody.innerHTML = cart.map(item => `
+      <tr>
+        <td><img class="cart-item-img" src="${item.image || ''}" alt="${item.name}" onerror="this.style.background='#EDE5D8';this.src=''"/></td>
+        <td>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:17px;margin-bottom:4px;">${item.name}</div>
+          <div style="font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;">The Edit · One of One</div>
+        </td>
+        <td>${fmt(item.price)}</td>
+        <td>
+          <div class="qty-ctrl">
+            <button class="qty-btn" onclick="updateQty('${item.id}', ${item.qty - 1});renderCart();">−</button>
+            <span class="qty-val">${item.qty}</span>
+            <button class="qty-btn" onclick="updateQty('${item.id}', ${item.qty + 1});renderCart();">+</button>
+          </div>
+        </td>
+        <td style="font-weight:400;">${fmt(item.price * item.qty)}</td>
+        <td><button onclick="removeFromCart('${item.id}');renderCart();" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;" title="Remove">×</button></td>
+      </tr>
+    `).join('');
+
+    const subtotal = cartTotal();
+    const shipping = subtotal >= 80000 ? 0 : 3500;
+    document.getElementById('summary-subtotal').textContent = fmt(subtotal);
+    document.getElementById('summary-shipping').textContent = shipping === 0 ? 'FREE' : fmt(shipping);
+    document.getElementById('summary-total').textContent = fmt(subtotal + shipping);
+  }
+
+  async function goCheckout() {
+    const user = await getUser();
+    if (!user) {
+      window.location.href = '/login.html?redirect=/checkout.html';
+      return;
+    }
+    window.location.href = '/checkout.html';
+  }
+
+  function applyPromo() {
+    showToast('No promo code found', 'error');
+  }
+
+  renderCart();
+</script>
+</body>
+</html>

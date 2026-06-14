@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Products — Admin MAYREE</title>
+<link rel="stylesheet" href="/css/mayree.css"/>
+<link rel="icon" href="/assets/logo.png"/>
+<style>
+/* ── Admin products specific ── */
+.prod-admin-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+  margin-top: 8px;
+}
+.prod-admin-card {
+  background: var(--ivory);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  position: relative;
+  transition: box-shadow .25s;
+}
+.prod-admin-card:hover { box-shadow: 0 6px 28px rgba(201,168,122,.18); }
+.pac-img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+  background: var(--beige);
+  display: block;
+}
+.pac-img-placeholder {
+  width: 100%;
+  aspect-ratio: 3/4;
+  background: linear-gradient(135deg, var(--beige), var(--sand));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40px;
+}
+.pac-body { padding: 16px; }
+.pac-name { font-family: 'Cormorant Garamond', serif; font-size: 17px; font-weight: 400; margin-bottom: 4px; color: var(--ink); }
+.pac-cat  { font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.pac-price { font-size: 16px; color: var(--ink); font-weight: 400; margin-bottom: 12px; }
+.pac-price-old { font-size: 12px; color: var(--muted); text-decoration: line-through; margin-left: 6px; }
+.pac-actions { display: flex; gap: 8px; align-items: center; }
+.pac-status-toggle { display: flex; align-items: center; gap: 6px; margin-left: auto; cursor: pointer; }
+.toggle-switch {
+  position: relative; width: 36px; height: 20px;
+  background: var(--border); border-radius: 10px; cursor: pointer;
+  transition: background .25s;
+}
+.toggle-switch.on { background: var(--champagne); }
+.toggle-switch::after {
+  content: '';
+  position: absolute; top: 3px; left: 3px;
+  width: 14px; height: 14px;
+  border-radius: 50%; background: white;
+  transition: transform .25s;
+}
+.toggle-switch.on::after { transform: translateX(16px); }
+.badge-pill {
+  position: absolute; top: 12px; left: 12px;
+  font-size: 8px; letter-spacing: 2px; text-transform: uppercase;
+  padding: 4px 10px; font-family: 'Jost', sans-serif;
+}
+.badge-new   { background: var(--champagne); color: var(--ink); }
+.badge-sale  { background: #E53935; color: white; }
+.badge-best  { background: var(--brown); color: var(--champagne); }
+.badge-last  { background: var(--mocha); color: var(--ivory); }
+
+/* Modal image grid */
+.modal-img-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.modal-img-item { position: relative; }
+.modal-img-item img { width: 80px; height: 96px; object-fit: cover; border: 2px solid var(--border); display: block; }
+.modal-img-item .del-img {
+  position: absolute; top: -6px; right: -6px;
+  width: 18px; height: 18px; border-radius: 50%;
+  background: var(--error); color: white; border: none;
+  font-size: 11px; cursor: pointer; display: flex;
+  align-items: center; justify-content: center; line-height: 1;
+}
+.upload-zone {
+  border: 2px dashed var(--border); padding: 28px 20px;
+  text-align: center; cursor: pointer; transition: all .25s;
+  background: var(--cream);
+}
+.upload-zone:hover, .upload-zone.dragover {
+  border-color: var(--champagne); background: rgba(201,168,122,.07);
+}
+.upload-zone-icon { font-size: 36px; margin-bottom: 8px; display: block; }
+.upload-zone p { font-size: 12px; color: var(--muted); margin: 0; line-height: 1.6; }
+
+/* Search/filter bar */
+.filter-bar {
+  display: flex; gap: 12px; align-items: center;
+  margin-bottom: 24px; flex-wrap: wrap;
+}
+.filter-bar input, .filter-bar select {
+  background: var(--ivory); border: 1px solid var(--border);
+  padding: 9px 14px; font-size: 12px; font-family: 'Jost', sans-serif;
+  color: var(--ink); outline: none;
+}
+.filter-bar input { width: 220px; }
+.count-badge {
+  background: var(--champagne); color: var(--ink);
+  font-size: 10px; padding: 3px 10px; letter-spacing: 1px;
+}
+
+/* Loading skeleton */
+.skel { background: linear-gradient(90deg, var(--beige) 25%, var(--sand) 50%, var(--beige) 75%); background-size: 200%; animation: shimmer 1.4s infinite; }
+@keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+</style>
+</head>
+<body>
+<div id="auth-gate" style="position:fixed;inset:0;background:#FDFBF7;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;"><img src="/assets/logo.png" style="height:60px;opacity:.6;"/><div style="width:28px;height:28px;border:2px solid #EDE5D8;border-top-color:#C9A87A;border-radius:50%;animation:spin .8s linear infinite;"></div></div>
+
+<div class="admin-layout">
+  <!-- SIDEBAR -->
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-logo">
+      <img src="/assets/logo.png" alt="MAYREE"/>
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(201,168,122,.5);margin-top:8px;">Admin Panel</div>
+    </div>
+    <a href="/admin/index.html" class="admin-nav-link">📊 &nbsp;Dashboard</a>
+    <a href="/admin/products.html" class="admin-nav-link active">👜 &nbsp;Products</a>
+    <a href="/admin/orders.html" class="admin-nav-link">📦 &nbsp;Orders</a>
+    <a href="/admin/customers.html" class="admin-nav-link">👥 &nbsp;Customers</a>
+    <div style="border-top:1px solid rgba(255,255,255,.08);margin:24px 0;"></div>
+    <a href="/index.html" target="_blank" class="admin-nav-link">🏠 &nbsp;View Site</a>
+    <a href="/shop.html" target="_blank" class="admin-nav-link">🛍 &nbsp;View Shop</a>
+    <a href="#" onclick="logout()" class="admin-nav-link" style="margin-top:auto;color:rgba(229,57,53,.7);">⬅ &nbsp;Sign Out</a>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="admin-main">
+    <div class="admin-header">
+      <div>
+        <h1 class="admin-title">Products</h1>
+        <p style="font-size:12px;color:var(--muted);margin-top:4px;">Add, edit and manage every bag on your site from here.</p>
+      </div>
+      <button class="btn btn-dark" onclick="openAddModal()">+ Add New Product</button>
+    </div>
+
+    <!-- FILTER BAR -->
+    <div class="filter-bar">
+      <input type="text" id="search-q" placeholder="Search by name..." oninput="applyFilter()"/>
+      <select id="filter-cat" onchange="applyFilter()">
+        <option value="">All Categories</option>
+        <option>Handbags</option>
+        <option>Shoulder Bags</option>
+        <option>Bucket Bags</option>
+        <option>Clutches</option>
+        <option>Crossbody</option>
+        <option>Accessories</option>
+      </select>
+      <select id="filter-status" onchange="applyFilter()">
+        <option value="">All Status</option>
+        <option value="active">Active (visible)</option>
+        <option value="hidden">Hidden</option>
+      </select>
+      <span class="count-badge" id="prod-count">— products</span>
+    </div>
+
+    <!-- PRODUCT GRID -->
+    <div class="prod-admin-grid" id="prod-grid">
+      <!-- Skeleton loaders -->
+      ${Array(8).fill('<div class="prod-admin-card"><div class="skel" style="width:100%;aspect-ratio:3/4;"></div><div style="padding:16px;"><div class="skel" style="height:14px;margin-bottom:8px;border-radius:2px;"></div><div class="skel" style="height:10px;width:60%;border-radius:2px;"></div></div></div>').join('')}
+    </div>
+  </main>
+</div>
+
+<!-- ═══ ADD / EDIT MODAL ═══════════════════════════════════════ -->
+<div class="modal-overlay" id="product-modal">
+  <div class="modal" style="max-width:640px;">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <h2 class="modal-title" id="modal-title">Add New Product</h2>
+
+    <!-- NAME -->
+    <div class="form-group">
+      <label class="form-label">Product Name *</label>
+      <input type="text" id="f-name" class="form-control" placeholder="e.g. The Camellia Noir"/>
+    </div>
+
+    <!-- PRICE ROW -->
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Price (₦) *</label>
+        <input type="number" id="f-price" class="form-control" placeholder="65000" min="0"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Original Price (₦) <span style="font-size:10px;color:var(--muted);">optional — shows strikethrough</span></label>
+        <input type="number" id="f-old-price" class="form-control" placeholder="Leave blank if no discount" min="0"/>
+      </div>
+    </div>
+
+    <!-- CATEGORY + BADGE -->
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Category *</label>
+        <select id="f-category" class="form-control">
+          <option value="">Select category</option>
+          <option>Handbags</option>
+          <option>Shoulder Bags</option>
+          <option>Bucket Bags</option>
+          <option>Clutches</option>
+          <option>Crossbody</option>
+          <option>Accessories</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Badge <span style="font-size:10px;color:var(--muted);">shown on product card</span></label>
+        <select id="f-badge" class="form-control">
+          <option value="">None</option>
+          <option value="New In">New In</option>
+          <option value="Bestseller">Bestseller</option>
+          <option value="Sale">Sale</option>
+          <option value="Last One">Last One</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- DESCRIPTION -->
+    <div class="form-group">
+      <label class="form-label">Description <span style="font-size:10px;color:var(--muted);">shown on product page</span></label>
+      <textarea id="f-desc" class="form-control" rows="4" placeholder="Describe this piece — material, origin, what makes it special..."></textarea>
+    </div>
+
+    <!-- VISIBILITY -->
+    <div class="form-group" style="display:flex;align-items:center;gap:14px;">
+      <label class="form-label" style="margin:0;">Visible on site</label>
+      <div id="f-active-toggle" class="toggle-switch on" onclick="toggleActiveField()"></div>
+      <span id="f-active-label" style="font-size:12px;color:var(--success);">Active — customers can see this</span>
+    </div>
+
+    <!-- IMAGES -->
+    <div class="form-group">
+      <label class="form-label">
+        Product Images
+        <span style="font-size:10px;color:var(--muted);">— first image is the main photo</span>
+      </label>
+
+      <!-- Existing images (edit mode) -->
+      <div id="existing-imgs-wrap" style="display:none;margin-bottom:12px;">
+        <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Current Images</div>
+        <div class="modal-img-grid" id="existing-imgs"></div>
+      </div>
+
+      <!-- Upload new -->
+      <div class="upload-zone" id="upload-zone"
+           onclick="document.getElementById('f-img-input').click()"
+           ondragover="event.preventDefault();this.classList.add('dragover')"
+           ondragleave="this.classList.remove('dragover')"
+           ondrop="handleDrop(event)">
+        <span class="upload-zone-icon">📸</span>
+        <p><strong>Click to upload</strong> or drag &amp; drop<br/>JPG, PNG, WEBP &nbsp;·&nbsp; Max 5 MB each &nbsp;·&nbsp; Multiple OK</p>
+      </div>
+      <input type="file" id="f-img-input" accept="image/jpeg,image/png,image/webp" multiple style="display:none;" onchange="handleFileSelect(this.files)"/>
+
+      <!-- New image previews -->
+      <div class="modal-img-grid" id="new-img-previews" style="margin-top:10px;"></div>
+      <div id="upload-progress" style="display:none;margin-top:10px;font-size:12px;color:var(--muted);">Uploading images...</div>
+    </div>
+
+    <!-- SAVE -->
+    <div style="display:flex;gap:12px;margin-top:28px;padding-top:20px;border-top:1px solid var(--border);">
+      <button class="btn btn-dark" id="save-btn" onclick="submitProduct()">Save Product</button>
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button id="delete-btn" class="btn btn-danger" style="display:none;margin-left:auto;" onclick="handleDelete()">Delete Product</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/admin.js"></script>
+<script>
+// ── State ──────────────────────────────────────────────────
+let allProducts  = [];
+let editingId    = null;
+let newFiles     = [];        // File objects waiting to upload
+let existingImgs = [];        // URLs already saved for this product
+let fieldActive  = true;
+
+// ── Init ───────────────────────────────────────────────────
+async function init() {
+  const user = await requireAdmin();
+  if (!user) return;
+    document.getElementById("auth-gate").style.display = "none";
+  await loadProducts();
+}
+
+async function loadProducts() {
+  const grid = document.getElementById('prod-grid');
+  // Show skeletons while loading
+  grid.innerHTML = Array(6).fill(`
+    <div class="prod-admin-card">
+      <div class="skel" style="width:100%;aspect-ratio:3/4;"></div>
+      <div style="padding:16px;">
+        <div class="skel" style="height:14px;margin-bottom:8px;border-radius:2px;"></div>
+        <div class="skel" style="height:10px;width:60%;border-radius:2px;"></div>
+      </div>
+    </div>`).join('');
+
+  allProducts = await adminFetchProducts();
+  applyFilter();
+}
+
+// ── Filter / Render ────────────────────────────────────────
+function applyFilter() {
+  const q      = (document.getElementById('search-q').value || '').toLowerCase();
+  const cat    = document.getElementById('filter-cat').value;
+  const status = document.getElementById('filter-status').value;
+
+  const filtered = allProducts.filter(p => {
+    if (q   && !p.name.toLowerCase().includes(q)) return false;
+    if (cat && p.category !== cat)                 return false;
+    if (status === 'active' && !p.active)          return false;
+    if (status === 'hidden' &&  p.active)          return false;
+    return true;
+  });
+
+  document.getElementById('prod-count').textContent =
+    `${filtered.length} product${filtered.length !== 1 ? 's' : ''}`;
+
+  renderGrid(filtered);
+}
+
+function renderGrid(products) {
+  const grid = document.getElementById('prod-grid');
+
+  if (!products.length) {
+    grid.innerHTML = `
+      <div style="grid-column:1/-1;text-align:center;padding:80px 20px;">
+        <div style="font-size:48px;margin-bottom:16px;">👜</div>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:22px;color:var(--muted);margin-bottom:20px;">No products yet</p>
+        <button class="btn btn-dark btn-sm" onclick="openAddModal()">Add Your First Product</button>
+      </div>`;
+    return;
+  }
+
+  const badgeClass = { 'New In':'badge-new', 'Bestseller':'badge-best', 'Sale':'badge-sale', 'Last One':'badge-last' };
+
+  grid.innerHTML = products.map(p => {
+    const img = p.images?.[0];
+    const bc  = badgeClass[p.badge] || '';
+    return `
+    <div class="prod-admin-card" id="pcard-${p.id}">
+      ${p.badge ? `<span class="badge-pill ${bc}">${p.badge}</span>` : ''}
+      ${img
+        ? `<img class="pac-img" src="${img}" alt="${p.name}" loading="lazy"/>`
+        : `<div class="pac-img-placeholder">👜</div>`
+      }
+      ${!p.active ? '<div style="position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(253,251,247,.5);pointer-events:none;display:flex;align-items:center;justify-content:center;"><span style="background:rgba(0,0,0,.35);color:white;padding:6px 14px;font-size:10px;letter-spacing:2px;text-transform:uppercase;">Hidden</span></div>' : ''}
+      <div class="pac-body">
+        <div class="pac-name">${p.name}</div>
+        <div class="pac-cat">${p.category || 'Uncategorised'}</div>
+        <div class="pac-price">
+          ${fmt(p.price)}
+          ${p.old_price ? `<span class="pac-price-old">${fmt(p.old_price)}</span>` : ''}
+        </div>
+        <div class="pac-actions">
+          <button class="btn btn-ghost btn-sm" onclick="openEditModal('${p.id}')">Edit</button>
+          <div class="pac-status-toggle" onclick="quickToggleActive('${p.id}', ${!p.active})">
+            <div class="toggle-switch ${p.active ? 'on' : ''}"></div>
+            <span style="font-size:10px;color:${p.active ? 'var(--success)' : 'var(--muted)'};">
+              ${p.active ? 'Live' : 'Hidden'}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── Modal helpers ──────────────────────────────────────────
+function openAddModal() {
+  editingId    = null;
+  newFiles     = [];
+  existingImgs = [];
+  fieldActive  = true;
+
+  document.getElementById('modal-title').textContent = 'Add New Product';
+  document.getElementById('f-name').value      = '';
+  document.getElementById('f-price').value     = '';
+  document.getElementById('f-old-price').value = '';
+  document.getElementById('f-category').value  = '';
+  document.getElementById('f-badge').value     = '';
+  document.getElementById('f-desc').value      = '';
+  document.getElementById('new-img-previews').innerHTML = '';
+  document.getElementById('existing-imgs-wrap').style.display = 'none';
+  document.getElementById('delete-btn').style.display = 'none';
+  setActiveUI(true);
+  document.getElementById('product-modal').classList.add('open');
+}
+
+function openEditModal(id) {
+  const p = allProducts.find(p => p.id === id);
+  if (!p) return;
+
+  editingId    = id;
+  newFiles     = [];
+  existingImgs = [...(p.images || [])];
+  fieldActive  = p.active;
+
+  document.getElementById('modal-title').textContent = 'Edit Product';
+  document.getElementById('f-name').value      = p.name || '';
+  document.getElementById('f-price').value     = p.price || '';
+  document.getElementById('f-old-price').value = p.old_price || '';
+  document.getElementById('f-category').value  = p.category || '';
+  document.getElementById('f-badge').value     = p.badge || '';
+  document.getElementById('f-desc').value      = p.description || '';
+  document.getElementById('new-img-previews').innerHTML = '';
+  document.getElementById('delete-btn').style.display = 'block';
+  setActiveUI(p.active);
+  renderExistingImgs();
+  document.getElementById('product-modal').classList.add('open');
+}
+
+function closeModal() {
+  document.getElementById('product-modal').classList.remove('open');
+  document.getElementById('f-img-input').value = '';
+  newFiles = [];
+}
+
+function setActiveUI(active) {
+  fieldActive = active;
+  const tog = document.getElementById('f-active-toggle');
+  const lbl = document.getElementById('f-active-label');
+  tog.className = 'toggle-switch' + (active ? ' on' : '');
+  lbl.textContent = active ? 'Active — customers can see this' : 'Hidden — not visible on site';
+  lbl.style.color = active ? 'var(--success)' : 'var(--muted)';
+}
+
+function toggleActiveField() {
+  setActiveUI(!fieldActive);
+}
+
+// ── Existing images ─────────────────────────────────────────
+function renderExistingImgs() {
+  const wrap = document.getElementById('existing-imgs-wrap');
+  const grid = document.getElementById('existing-imgs');
+
+  if (!existingImgs.length) {
+    wrap.style.display = 'none';
+    return;
+  }
+  wrap.style.display = 'block';
+  grid.innerHTML = existingImgs.map((url, i) => `
+    <div class="modal-img-item">
+      <img src="${url}" alt="Product image ${i+1}"/>
+      <button class="del-img" onclick="removeExistingImg(${i})" title="Remove">×</button>
+    </div>`).join('');
+}
+
+function removeExistingImg(index) {
+  existingImgs.splice(index, 1);
+  renderExistingImgs();
+}
+
+// ── File handling ───────────────────────────────────────────
+function handleFileSelect(files) {
+  addFiles(Array.from(files));
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('upload-zone').classList.remove('dragover');
+  addFiles(Array.from(e.dataTransfer.files).filter(f => f.type.startsWith('image/')));
+}
+
+function addFiles(files) {
+  newFiles = [...newFiles, ...files];
+  renderNewPreviews();
+}
+
+function renderNewPreviews() {
+  const container = document.getElementById('new-img-previews');
+  container.innerHTML = '';
+  newFiles.forEach((file, i) => {
+    const reader = new FileReader();
+    reader.onload = e => {
+      const div = document.createElement('div');
+      div.className = 'modal-img-item';
+      div.innerHTML = `
+        <img src="${e.target.result}" alt="New image ${i+1}"/>
+        <button class="del-img" onclick="removeNewFile(${i})" title="Remove">×</button>`;
+      container.appendChild(div);
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function removeNewFile(index) {
+  newFiles.splice(index, 1);
+  renderNewPreviews();
+}
+
+// ── Save ────────────────────────────────────────────────────
+async function submitProduct() {
+  const name     = document.getElementById('f-name').value.trim();
+  const price    = document.getElementById('f-price').value.trim();
+  const category = document.getElementById('f-category').value;
+
+  if (!name)     { showToast('Product name is required', 'error'); document.getElementById('f-name').focus(); return; }
+  if (!price)    { showToast('Price is required', 'error'); document.getElementById('f-price').focus(); return; }
+  if (!category) { showToast('Please select a category', 'error'); document.getElementById('f-category').focus(); return; }
+  if (!editingId && !newFiles.length && !existingImgs.length) {
+    showToast('Please upload at least one image', 'error'); return;
+  }
+
+  const btn = document.getElementById('save-btn');
+  setLoading(btn, true, editingId ? 'Saving changes...' : 'Adding product...');
+
+  try {
+    await saveProduct({
+      name,
+      price,
+      old_price:      document.getElementById('f-old-price').value.trim(),
+      category,
+      badge:          document.getElementById('f-badge').value,
+      description:    document.getElementById('f-desc').value.trim(),
+      active:         fieldActive,
+      imageFiles:     newFiles,
+      existingImages: existingImgs,
+      keepExisting:   true,
+    }, editingId);
+
+    showToast(editingId ? 'Product updated ✓' : 'Product added ✓');
+    closeModal();
+    await loadProducts();
+  } catch (err) {
+    showToast('Error: ' + err.message, 'error');
+    console.error(err);
+  }
+
+  setLoading(btn, false, 'Save Product');
+}
+
+// ── Delete ──────────────────────────────────────────────────
+async function handleDelete() {
+  const ok = await adminDeleteProduct(editingId);
+  if (ok) {
+    closeModal();
+    await loadProducts();
+  }
+}
+
+// ── Quick toggle active from card ───────────────────────────
+async function quickToggleActive(id, active) {
+  await sb.from('products').update({ active }).eq('id', id);
+  showToast(active ? 'Product is now live ✓' : 'Product hidden from shop');
+  const p = allProducts.find(p => p.id === id);
+  if (p) p.active = active;
+  applyFilter();
+}
+
+// ── Start ───────────────────────────────────────────────────
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Customers — Admin MAYREE</title>
+<link rel="stylesheet" href="/css/mayree.css"/>
+<link rel="icon" href="/assets/logo.png"/>
+</head>
+<body>
+<div id="auth-gate" style="position:fixed;inset:0;background:#FDFBF7;z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;"><img src="/assets/logo.png" style="height:60px;opacity:.6;"/><div style="width:28px;height:28px;border:2px solid #EDE5D8;border-top-color:#C9A87A;border-radius:50%;animation:spin .8s linear infinite;"></div></div>
+
+<div class="admin-layout">
+  <aside class="admin-sidebar">
+    <div class="admin-sidebar-logo">
+      <img src="/assets/logo.png" alt="MAYREE"/>
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:rgba(201,168,122,.5);margin-top:8px;">Admin Panel</div>
+    </div>
+    <a href="/admin/index.html" class="admin-nav-link">📊 &nbsp;Dashboard</a>
+    <a href="/admin/products.html" class="admin-nav-link">👜 &nbsp;Products</a>
+    <a href="/admin/orders.html" class="admin-nav-link">📦 &nbsp;Orders</a>
+    <a href="/admin/customers.html" class="admin-nav-link active">👥 &nbsp;Customers</a>
+    <div style="border-top:1px solid rgba(255,255,255,.08);margin:24px 0;"></div>
+    <a href="/index.html" class="admin-nav-link">🏠 &nbsp;View Site</a>
+    <a href="#" onclick="logout()" class="admin-nav-link" style="color:rgba(229,57,53,.7);">⬅ &nbsp;Sign Out</a>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-header">
+      <h1 class="admin-title">Customers</h1>
+      <input type="text" id="search-customers" class="form-control" placeholder="Search by name or email..." style="max-width:280px;" oninput="filterCustomers()"/>
+    </div>
+
+    <div style="background:var(--ivory);border:1px solid var(--border);">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Orders</th>
+            <th>Total Spent</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="customers-body">
+          <tr><td colspan="6" style="text-align:center;padding:40px;"><div class="loading-spinner" style="margin:0 auto;"></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/admin.js"></script>
+<script>
+  let allCustomers = [];
+
+  async function init() {
+    await requireAdmin();
+
+    // Fetch profiles with their order counts and totals
+    const { data: profiles } = await sb.from('profiles').select('*').order('id', { ascending: false });
+    const { data: orders } = await sb.from('orders').select('user_id, total, status');
+
+    // Merge order data into profiles
+    allCustomers = (profiles || []).map(p => {
+      const userOrders = (orders || []).filter(o => o.user_id === p.id);
+      const totalSpent = userOrders
+        .filter(o => ['paid','processing','shipped','delivered'].includes(o.status))
+        .reduce((s, o) => s + (o.total || 0), 0);
+      return { ...p, orderCount: userOrders.length, totalSpent };
+    });
+
+    renderCustomers(allCustomers);
+  }
+
+  function filterCustomers() {
+    const search = document.getElementById('search-customers').value.toLowerCase();
+    const filtered = allCustomers.filter(c =>
+      !search ||
+      (c.full_name || '').toLowerCase().includes(search) ||
+      (c.email || '').toLowerCase().includes(search)
+    );
+    renderCustomers(filtered);
+  }
+
+  function renderCustomers(customers) {
+    const tbody = document.getElementById('customers-body');
+    if (!customers.length) {
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:40px;color:var(--muted);">No customers found</td></tr>';
+      return;
+    }
+    tbody.innerHTML = customers.map(c => `
+      <tr>
+        <td>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="width:36px;height:36px;border-radius:50%;background:var(--champagne);display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--ivory);flex-shrink:0;">
+              ${(c.full_name || c.email || '?').charAt(0).toUpperCase()}
+            </div>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:16px;">${c.full_name || '—'}</span>
+          </div>
+        </td>
+        <td style="font-size:13px;color:var(--muted);">${c.email || '—'}</td>
+        <td style="font-size:13px;color:var(--muted);">${c.phone || '—'}</td>
+        <td style="font-size:14px;">${c.orderCount} order${c.orderCount !== 1 ? 's' : ''}</td>
+        <td style="font-size:14px;font-weight:400;">${fmt(c.totalSpent)}</td>
+        <td>
+          <div style="display:flex;gap:8px;">
+            ${c.email ? `<a href="mailto:${c.email}" class="btn btn-ghost btn-sm">Email</a>` : ''}
+            ${c.phone ? `<a href="https://wa.me/${c.phone.replace(/\D/g,'')}" target="_blank" class="btn btn-gold btn-sm">WhatsApp</a>` : ''}
+          </div>
+        </td>
+      </tr>`).join('');
+  }
+
+  init();
+</script>
+</body>
+</html>

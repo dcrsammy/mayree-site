@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Product — MAYREE</title>
+<link rel="stylesheet" href="/css/mayree.css"/>
+<link rel="icon" href="/assets/logo.png"/>
+<style>
+.product-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; padding: 52px 0; }
+.gallery { position: sticky; top: 100px; }
+.main-img { aspect-ratio: 3/4; overflow: hidden; background: var(--beige); margin-bottom: 12px; cursor: zoom-in; }
+.main-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.main-img:hover img { transform: scale(1.06); }
+.thumb-row { display: flex; gap: 8px; }
+.thumb { width: 72px; height: 86px; overflow: hidden; background: var(--beige); cursor: pointer; border: 2px solid transparent; transition: border-color .2s; flex-shrink: 0; }
+.thumb.active { border-color: var(--champagne); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; }
+.product-info-col {}
+.product-category { font-size: 9px; letter-spacing: 4px; text-transform: uppercase; color: var(--champagne); margin-bottom: 12px; display: block; }
+.product-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(28px,3.5vw,42px); font-weight: 400; letter-spacing: 2px; color: var(--ink); margin-bottom: 16px; line-height: 1.1; }
+.product-price-block { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+.product-price { font-family: 'Cormorant Garamond', serif; font-size: 28px; color: var(--ink); }
+.product-price-old { font-size: 18px; color: var(--muted); text-decoration: line-through; }
+.product-divider { width: 100%; height: 1px; background: var(--border); margin: 24px 0; }
+.product-desc { font-size: 13px; line-height: 1.95; color: var(--muted); margin-bottom: 28px; }
+.qty-selector { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+.qty-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+.qty-ctrl { display: flex; align-items: center; gap: 0; border: 1px solid var(--border); }
+.qty-ctrl button { width: 38px; height: 38px; background: none; border: none; cursor: pointer; font-size: 18px; color: var(--ink); transition: background .2s; }
+.qty-ctrl button:hover { background: var(--sand); }
+.qty-ctrl span { padding: 0 16px; font-size: 15px; min-width: 48px; text-align: center; }
+.product-actions-col { display: flex; flex-direction: column; gap: 12px; margin-bottom: 28px; }
+.wish-row { display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--muted); font-size: 12px; letter-spacing: 1px; transition: color .2s; }
+.wish-row:hover { color: var(--gold); }
+.product-meta { display: flex; flex-direction: column; gap: 10px; }
+.meta-row { display: flex; gap: 12px; font-size: 12px; }
+.meta-label { color: var(--muted); min-width: 80px; letter-spacing: 1px; }
+.meta-val { color: var(--ink); }
+.accordion { margin-top: 32px; }
+.acc-item { border-bottom: 1px solid var(--border); }
+.acc-header { display: flex; align-items: center; justify-content: space-between; padding: 16px 0; cursor: pointer; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--ink); }
+.acc-body { font-size: 13px; line-height: 1.9; color: var(--muted); padding: 0 0 16px; display: none; }
+.acc-body.open { display: block; }
+.reviews-section { margin-top: 80px; padding-top: 48px; border-top: 1px solid var(--border); }
+.review-card { padding: 24px 0; border-bottom: 1px solid var(--border); }
+.review-stars { color: var(--champagne); font-size: 13px; margin-bottom: 8px; }
+.review-text { font-family: 'Cormorant Garamond', serif; font-size: 16px; font-style: italic; color: var(--brown); line-height: 1.7; margin-bottom: 10px; }
+.review-author { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+@media(max-width:768px) {
+  .product-layout { grid-template-columns: 1fr; gap: 32px; padding: 28px 0; }
+  .gallery { position: static; }
+}
+</style>
+</head>
+<body>
+
+<div class="announce">✦ &nbsp;Free shipping on orders over ₦80,000 &nbsp;✦&nbsp; Worldwide delivery &nbsp;✦</div>
+
+<nav class="main-nav">
+  <div class="nav-inner">
+    <div class="nav-left">
+      <a href="/index.html" class="nav-link">Home</a>
+      <a href="/shop.html" class="nav-link">The Edit</a>
+      <a href="/index.html#request" class="nav-link">By Request</a>
+    </div>
+    <div class="nav-logo"><a href="/index.html"><img src="/assets/logo.png" alt="MAYREE"/></a></div>
+    <div class="nav-right">
+      <a href="/login.html" class="nav-link" id="nav-login">Login</a>
+      <a href="/account.html" class="nav-link" id="nav-account" style="display:none">Account</a>
+      <button class="nav-icon" onclick="window.location='/wishlist.html'">♡</button>
+      <button class="nav-icon" onclick="window.location='/cart.html'" style="position:relative">🛍 <span class="cart-count" id="cart-badge">0</span></button>
+      <button class="nav-toggle" id="nav-toggle">☰</button>
+    </div>
+  </div>
+</nav>
+
+<div class="nav-mobile" id="nav-mobile">
+  <button class="nav-mobile-close" id="nav-close">✕</button>
+  <a href="/index.html">Home</a><a href="/shop.html">Shop</a>
+  <a href="/wishlist.html">Wishlist</a><a href="/cart.html">Cart</a><a href="/account.html">Account</a>
+</div>
+
+<div class="wrap">
+  <div class="breadcrumb">
+    <a href="/index.html">Home</a> <span>/</span>
+    <a href="/shop.html">The Edit</a> <span>/</span>
+    <span id="product-breadcrumb">Loading...</span>
+  </div>
+
+  <div class="product-layout" id="product-layout">
+    <div class="loading-spinner" style="grid-column:span 2;"></div>
+  </div>
+
+  <!-- REVIEWS -->
+  <div class="reviews-section">
+    <h3 style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;margin-bottom:32px;">Customer Reviews</h3>
+    <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"This bag exceeded every expectation. The quality is absolutely stunning — I've gotten compliments every single time I've worn it."</p><div class="review-author">Adaeze O. — Lagos, Nigeria</div></div>
+    <div class="review-card"><div class="review-stars">★★★★★</div><p class="review-text">"Packaged so beautifully I almost didn't want to open it. The bag itself is even more gorgeous in person."</p><div class="review-author">Kemi B. — Port Harcourt</div></div>
+    <div class="review-card"><div class="review-stars">★★★★☆</div><p class="review-text">"Exactly as described and arrived quickly. Mayree's packaging is top tier — feels like a proper luxury brand."</p><div class="review-author">Funmi A. — Abuja</div></div>
+  </div>
+
+  <!-- RELATED -->
+  <div style="margin-top:80px;padding-top:48px;border-top:1px solid var(--border);">
+    <div class="sec-head" style="text-align:left;">
+      <span class="ey">You Might Also Love</span>
+      <h3 class="sec-title">More From The Edit</h3>
+      <div class="rule rule-left"></div>
+    </div>
+    <div class="prod-grid" id="related-grid" style="margin-top:32px;"><div class="loading-spinner"></div></div>
+  </div>
+</div>
+
+<div style="height:80px;"></div>
+<footer class="main-footer">
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div><div class="ft-logo"><img src="/assets/logo.png" alt="MAYREE"/></div><p class="ft-desc">Luxury bags, curated and crafted.<br/>Lagos, Nigeria · Worldwide Shipping.</p></div>
+      <div><span class="ft-col-title">Shop</span><ul class="ft-links"><li><a href="/shop.html">New Arrivals</a></li><li><a href="/shop.html">The Edit</a></li></ul></div>
+      <div><span class="ft-col-title">Help</span><ul class="ft-links"><li><a href="/track.html">Track Order</a></li><li><a href="#">Returns</a></li></ul></div>
+      <div><span class="ft-col-title">Account</span><ul class="ft-links"><li><a href="/login.html">Login</a></li><li><a href="/wishlist.html">Wishlist</a></li></ul></div>
+      <div><span class="ft-col-title">Connect</span><ul class="ft-links"><li><a href="https://instagram.com/mayree">Instagram</a></li><li><a href="https://wa.me/2348000000000">WhatsApp</a></li></ul></div>
+    </div>
+    <div class="ft-bot"><span class="ft-copy">© 2025 Mayree. All rights reserved.</span><div class="ft-pays"><span class="pay">Paystack</span><span class="pay">Visa</span><span class="pay">Mastercard</span></div></div>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/shop.js"></script>
+<script>
+  updateCartBadge();
+  updateNavAuth();
+  document.getElementById('nav-toggle').addEventListener('click', () => document.getElementById('nav-mobile').classList.add('open'));
+  document.getElementById('nav-close').addEventListener('click', () => document.getElementById('nav-mobile').classList.remove('open'));
+
+  let currentProduct = null;
+  let qty = 1;
+
+  async function loadProduct() {
+    const id = getParam('id');
+    if (!id) { window.location.href = '/shop.html'; return; }
+    const product = await fetchProduct(id);
+    if (!product) { window.location.href = '/shop.html'; return; }
+    currentProduct = product;
+
+    document.title = `${product.name} — MAYREE`;
+    document.getElementById('product-breadcrumb').textContent = product.name;
+
+    const imgs = product.images || [];
+    const mainImgSrc = imgs[0] || '';
+    const thumbs = imgs.map((src, i) => `<div class="thumb ${i===0?'active':''}" onclick="setImg('${src}',this)"><img src="${src}" alt=""/></div>`).join('');
+
+    const wishlisted = isWishlisted(product.id);
+
+    document.getElementById('product-layout').innerHTML = `
+      <div class="gallery">
+        <div class="main-img"><img id="main-product-img" src="${mainImgSrc}" alt="${product.name}"/></div>
+        <div class="thumb-row">${thumbs}</div>
+      </div>
+      <div class="product-info-col">
+        <span class="product-category">${product.category || 'The Edit'} · One of One</span>
+        <h1 class="product-title">${product.name}</h1>
+        <div class="product-price-block">
+          <span class="product-price">${fmt(product.price)}</span>
+          ${product.old_price ? `<span class="product-price-old">${fmt(product.old_price)}</span>` : ''}
+        </div>
+        <div style="font-size:13px;color:var(--champagne);letter-spacing:1px;margin-bottom:20px;">★★★★★ &nbsp;<span style="color:var(--muted);">(12 reviews)</span></div>
+        <div class="product-divider"></div>
+        <p class="product-desc">${product.description || 'A one-of-one piece handpicked by Mayree. Transformed from a luxury brand piece into something entirely new. Crafted for the woman who already knows what she wants.'}</p>
+
+        <div class="qty-selector">
+          <span class="qty-label">Qty</span>
+          <div class="qty-ctrl">
+            <button onclick="changeQty(-1)">−</button>
+            <span id="qty-display">1</span>
+            <button onclick="changeQty(1)">+</button>
+          </div>
+        </div>
+
+        <div class="product-actions-col">
+          <button class="btn btn-dark btn-full" onclick="addToCartAndGo()">Add to Cart</button>
+          <button class="btn btn-gold btn-full" onclick="buyNow()">Buy Now</button>
+        </div>
+
+        <div class="wish-row" id="wish-row" onclick="toggleWish()">
+          <span id="wish-icon">${wishlisted ? '♥' : '♡'}</span>
+          <span id="wish-text">${wishlisted ? 'Saved to Wishlist' : 'Save to Wishlist'}</span>
+        </div>
+
+        <div class="product-divider"></div>
+
+        <div class="product-meta">
+          <div class="meta-row"><span class="meta-label">Category</span><span class="meta-val">${product.category || 'Handbag'}</span></div>
+          <div class="meta-row"><span class="meta-label">Condition</span><span class="meta-val">Brand New</span></div>
+          <div class="meta-row"><span class="meta-label">Shipping</span><span class="meta-val">2–5 business days</span></div>
+          <div class="meta-row"><span class="meta-label">Returns</span><span class="meta-val">14 days</span></div>
+        </div>
+
+        <div class="accordion">
+          <div class="acc-item">
+            <div class="acc-header" onclick="toggleAcc(this)"><span>Description & Details</span><span>+</span></div>
+            <div class="acc-body">${product.description || 'This piece has been handpicked and curated by Mayree. Each bag starts as a luxury brand promotional piece and is transformed through artisan customization into a fully functional, wearable statement bag.'}</div>
+          </div>
+          <div class="acc-item">
+            <div class="acc-header" onclick="toggleAcc(this)"><span>Shipping Information</span><span>+</span></div>
+            <div class="acc-body">We ship within 1–2 business days. Lagos delivery takes 1–3 days. Other states take 3–5 days. International shipping available — contact us for rates. Free shipping on orders over ₦80,000.</div>
+          </div>
+          <div class="acc-item">
+            <div class="acc-header" onclick="toggleAcc(this)"><span>Returns & Exchanges</span><span>+</span></div>
+            <div class="acc-body">We accept returns within 14 days of delivery. Item must be unused and in original packaging. Contact hello@mayree.co to initiate a return.</div>
+          </div>
+        </div>
+      </div>`;
+
+    // Load related
+    renderProducts('related-grid', { limit: 4 });
+  }
+
+  function setImg(src, el) {
+    document.getElementById('main-product-img').src = src;
+    document.querySelectorAll('.thumb').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  function changeQty(delta) {
+    qty = Math.max(1, qty + delta);
+    document.getElementById('qty-display').textContent = qty;
+  }
+
+  function addToCartAndGo() {
+    addToCart(currentProduct, qty);
+  }
+
+  function buyNow() {
+    addToCart(currentProduct, qty);
+    window.location.href = '/cart.html';
+  }
+
+  function toggleWish() {
+    const added = toggleWishlist(currentProduct);
+    document.getElementById('wish-icon').textContent = added ? '♥' : '♡';
+    document.getElementById('wish-text').textContent = added ? 'Saved to Wishlist' : 'Save to Wishlist';
+  }
+
+  function toggleAcc(header) {
+    const body = header.nextElementSibling;
+    const isOpen = body.classList.contains('open');
+    document.querySelectorAll('.acc-body').forEach(b => b.classList.remove('open'));
+    document.querySelectorAll('.acc-header span:last-child').forEach(s => s.textContent = '+');
+    if (!isOpen) {
+      body.classList.add('open');
+      header.querySelector('span:last-child').textContent = '−';
+    }
+  }
+
+  loadProduct();
+</script>
+</body>
+</html>

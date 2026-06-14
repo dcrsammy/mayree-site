@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Checkout — MAYREE</title>
+<link rel="stylesheet" href="/css/mayree.css"/>
+<link rel="icon" href="/assets/logo.png"/>
+<style>
+.checkout-layout { display: grid; grid-template-columns: 1fr 400px; gap: 52px; align-items: start; padding: 52px 0 80px; }
+.checkout-section { margin-bottom: 40px; }
+.checkout-section-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 400; letter-spacing: 1px; margin-bottom: 24px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+.checkout-summary-item { display: flex; gap: 16px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--border); }
+.checkout-summary-img { width: 64px; height: 78px; object-fit: cover; background: var(--beige); flex-shrink: 0; }
+.checkout-summary-name { font-family: 'Cormorant Garamond', serif; font-size: 16px; flex: 1; }
+.checkout-summary-qty { font-size: 12px; color: var(--muted); margin-top: 4px; }
+.checkout-summary-price { font-size: 15px; font-weight: 400; }
+@media(max-width:900px) { .checkout-layout { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<nav class="main-nav">
+  <div class="nav-inner">
+    <div class="nav-left"><a href="/cart.html" class="nav-link">← Back to Cart</a></div>
+    <div class="nav-logo"><a href="/index.html"><img src="/assets/logo.png" alt="MAYREE"/></a></div>
+    <div class="nav-right">
+      <button class="nav-icon" onclick="window.location='/cart.html'" style="position:relative">🛍 <span class="cart-count" id="cart-badge">0</span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-header">
+  <span class="ey">Almost There</span>
+  <h1 class="sec-title">Checkout</h1>
+  <div class="rule"></div>
+</div>
+
+<div class="wrap">
+  <div class="checkout-layout">
+    <!-- LEFT: FORM -->
+    <div>
+      <!-- Contact -->
+      <div class="checkout-section">
+        <h2 class="checkout-section-title">Contact Information</h2>
+        <div class="form-group">
+          <label class="form-label">Email Address</label>
+          <input type="email" id="email" class="form-control" placeholder="hello@email.com"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">First Name</label>
+            <input type="text" id="first-name" class="form-control" placeholder="First name"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Last Name</label>
+            <input type="text" id="last-name" class="form-control" placeholder="Last name"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Phone Number</label>
+          <input type="tel" id="phone" class="form-control" placeholder="+234 800 000 0000"/>
+        </div>
+      </div>
+
+      <!-- Shipping -->
+      <div class="checkout-section">
+        <h2 class="checkout-section-title">Shipping Address</h2>
+        <div class="form-group">
+          <label class="form-label">Street Address</label>
+          <input type="text" id="address" class="form-control" placeholder="Street address"/>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">City</label>
+            <input type="text" id="city" class="form-control" placeholder="City"/>
+          </div>
+          <div class="form-group">
+            <label class="form-label">State</label>
+            <select id="state" class="form-control">
+              <option value="">Select state</option>
+              <option>Lagos</option><option>Abuja (FCT)</option><option>Rivers</option>
+              <option>Kano</option><option>Oyo</option><option>Enugu</option>
+              <option>Anambra</option><option>Delta</option><option>Kaduna</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Country</label>
+          <select id="country" class="form-control">
+            <option value="Nigeria">Nigeria</option>
+            <option value="Ghana">Ghana</option>
+            <option value="UK">United Kingdom</option>
+            <option value="USA">United States</option>
+            <option value="Canada">Canada</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Delivery Notes (Optional)</label>
+          <textarea id="notes" class="form-control" rows="3" placeholder="Any special delivery instructions..."></textarea>
+        </div>
+      </div>
+
+      <!-- Shipping Method -->
+      <div class="checkout-section">
+        <h2 class="checkout-section-title">Shipping Method</h2>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <label style="display:flex;align-items:center;justify-content:space-between;padding:16px;border:1px solid var(--champagne);cursor:pointer;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <input type="radio" name="shipping" value="standard" checked style="accent-color:var(--gold);"/> 
+              <div><div style="font-size:13px;font-weight:400;">Standard Delivery</div><div style="font-size:11px;color:var(--muted);">2–5 business days</div></div>
+            </div>
+            <span id="standard-price" style="font-size:14px;">₦3,500</span>
+          </label>
+          <label style="display:flex;align-items:center;justify-content:space-between;padding:16px;border:1px solid var(--border);cursor:pointer;">
+            <div style="display:flex;align-items:center;gap:12px;">
+              <input type="radio" name="shipping" value="express" style="accent-color:var(--gold);"/>
+              <div><div style="font-size:13px;font-weight:400;">Express Delivery</div><div style="font-size:11px;color:var(--muted);">Next day (Lagos only)</div></div>
+            </div>
+            <span style="font-size:14px;">₦6,500</span>
+          </label>
+        </div>
+      </div>
+
+      <button class="btn btn-dark btn-full" id="pay-btn" onclick="initiatePayment()" style="font-size:12px;padding:18px;">
+        Pay Securely with Paystack
+      </button>
+      <p style="font-size:11px;color:var(--muted);text-align:center;margin-top:12px;letter-spacing:1px;">🔒 Your payment is encrypted and secure</p>
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <div>
+      <div class="order-summary" style="position:sticky;top:100px;">
+        <h3 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400;margin-bottom:20px;">Order Summary</h3>
+        <div id="checkout-items"></div>
+        <div style="margin-top:20px;">
+          <div class="summary-row"><span>Subtotal</span><span id="co-subtotal">₦0</span></div>
+          <div class="summary-row"><span>Shipping</span><span id="co-shipping">₦3,500</span></div>
+          <div class="summary-total"><span>Total</span><span id="co-total">₦0</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script>
+  updateCartBadge();
+
+  let user = null;
+  let shippingCost = 3500;
+
+  async function init() {
+    user = await getUser();
+    if (!user) { window.location.href = '/login.html?redirect=/checkout.html'; return; }
+
+    // Prefill email
+    document.getElementById('email').value = user.email || '';
+
+    // Load profile
+    const { data: profile } = await sb.from('profiles').select('*').eq('id', user.id).single();
+    if (profile) {
+      document.getElementById('first-name').value = profile.full_name?.split(' ')[0] || '';
+      document.getElementById('last-name').value = profile.full_name?.split(' ')[1] || '';
+      document.getElementById('phone').value = profile.phone || '';
+      document.getElementById('address').value = profile.address || '';
+    }
+
+    renderSummary();
+  }
+
+  document.querySelectorAll('input[name="shipping"]').forEach(r => {
+    r.addEventListener('change', () => {
+      shippingCost = r.value === 'express' ? 6500 : 3500;
+      renderSummary();
+    });
+  });
+
+  function renderSummary() {
+    const cart = getCart();
+    if (!cart.length) { window.location.href = '/shop.html'; return; }
+
+    document.getElementById('checkout-items').innerHTML = cart.map(item => `
+      <div class="checkout-summary-item">
+        <img class="checkout-summary-img" src="${item.image || ''}" alt="${item.name}" onerror="this.style.background='#EDE5D8'"/>
+        <div style="flex:1;">
+          <div class="checkout-summary-name">${item.name}</div>
+          <div class="checkout-summary-qty">Qty: ${item.qty}</div>
+        </div>
+        <div class="checkout-summary-price">${fmt(item.price * item.qty)}</div>
+      </div>
+    `).join('');
+
+    const subtotal = cartTotal();
+    const finalShipping = subtotal >= 80000 ? 0 : shippingCost;
+    document.getElementById('co-subtotal').textContent = fmt(subtotal);
+    document.getElementById('co-shipping').textContent = finalShipping === 0 ? 'FREE' : fmt(finalShipping);
+    document.getElementById('co-total').textContent = fmt(subtotal + finalShipping);
+    document.getElementById('standard-price').textContent = subtotal >= 80000 ? 'FREE' : '₦3,500';
+  }
+
+  async function initiatePayment() {
+    // Validate
+    const email = document.getElementById('email').value;
+    const firstName = document.getElementById('first-name').value;
+    const lastName = document.getElementById('last-name').value;
+    const phone = document.getElementById('phone').value;
+    const address = document.getElementById('address').value;
+    const city = document.getElementById('city').value;
+    const state = document.getElementById('state').value;
+
+    if (!email || !firstName || !lastName || !phone || !address || !city || !state) {
+      showToast('Please fill in all required fields', 'error');
+      return;
+    }
+
+    const subtotal = cartTotal();
+    const finalShipping = subtotal >= 80000 ? 0 : shippingCost;
+    const total = subtotal + finalShipping;
+
+    const btn = document.getElementById('pay-btn');
+    setLoading(btn, true, 'Initializing payment...');
+
+    // Save order draft to Supabase
+    const orderRef = 'MAY-' + Date.now();
+    const { data: order, error } = await sb.from('orders').insert({
+      user_id: user.id,
+      reference: orderRef,
+      items: getCart(),
+      subtotal,
+      shipping: finalShipping,
+      total,
+      status: 'pending',
+      shipping_address: { firstName, lastName, phone, address, city, state, country: document.getElementById('country').value },
+      notes: document.getElementById('notes').value
+    }).select().single();
+
+    if (error) {
+      showToast('Something went wrong. Please try again.', 'error');
+      setLoading(btn, false, 'Pay Securely with Paystack');
+      return;
+    }
+
+    // Update profile
+    await sb.from('profiles').upsert({
+      id: user.id,
+      email,
+      full_name: `${firstName} ${lastName}`,
+      phone,
+      address
+    });
+
+    // Launch Paystack
+    const handler = PaystackPop.setup({
+      key: PAYSTACK_PUBLIC_KEY,
+      email,
+      amount: total * 100, // kobo
+      currency: 'NGN',
+      ref: orderRef,
+      metadata: {
+        order_id: order.id,
+        name: `${firstName} ${lastName}`,
+        phone
+      },
+      callback: async function(response) {
+        // Verify and update order
+        await sb.from('orders').update({ status: 'paid', paystack_ref: response.reference }).eq('id', order.id);
+        clearCart();
+        window.location.href = `/confirmation.html?ref=${response.reference}&order=${order.id}`;
+      },
+      onClose: function() {
+        setLoading(btn, false, 'Pay Securely with Paystack');
+        showToast('Payment cancelled', 'error');
+        // Update order to cancelled
+        sb.from('orders').update({ status: 'cancelled' }).eq('id', order.id);
+      }
+    });
+    handler.openIframe();
+  }
+
+  init();
+</script>
+</body>
+</html>

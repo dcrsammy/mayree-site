@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Wishlist — MAYREE</title>
+<link rel="stylesheet" href="/css/mayree.css"/>
+<link rel="icon" href="/assets/logo.png"/>
+</head>
+<body>
+<div class="announce">✦ &nbsp;Free shipping on orders over ₦80,000 &nbsp;✦</div>
+<nav class="main-nav">
+  <div class="nav-inner">
+    <div class="nav-left"><a href="/index.html" class="nav-link">Home</a><a href="/shop.html" class="nav-link">The Edit</a></div>
+    <div class="nav-logo"><a href="/index.html"><img src="/assets/logo.png" alt="MAYREE"/></a></div>
+    <div class="nav-right">
+      <a href="/login.html" class="nav-link" id="nav-login">Login</a>
+      <a href="/account.html" class="nav-link" id="nav-account" style="display:none">Account</a>
+      <button class="nav-icon" onclick="window.location='/cart.html'" style="position:relative">🛍 <span class="cart-count" id="cart-badge">0</span></button>
+      <button class="nav-toggle" id="nav-toggle">☰</button>
+    </div>
+  </div>
+</nav>
+<div class="nav-mobile" id="nav-mobile">
+  <button class="nav-mobile-close" id="nav-close">✕</button>
+  <a href="/index.html">Home</a><a href="/shop.html">Shop</a><a href="/cart.html">Cart</a><a href="/account.html">Account</a>
+</div>
+<div class="page-header">
+  <span class="ey">Saved Pieces</span>
+  <h1 class="sec-title">My Wishlist</h1>
+  <div class="rule"></div>
+</div>
+<div class="wrap sec">
+  <div id="wishlist-empty" style="display:none;text-align:center;padding:60px 20px;">
+    <p style="font-family:'Cormorant Garamond',serif;font-size:26px;color:var(--muted);margin-bottom:20px;">Your wishlist is empty</p>
+    <a href="/shop.html" class="btn btn-dark">Browse The Edit</a>
+  </div>
+  <div class="prod-grid" id="wishlist-grid"></div>
+</div>
+<footer class="main-footer">
+  <div class="ft-inner">
+    <div class="ft-top">
+      <div><div class="ft-logo"><img src="/assets/logo.png" alt="MAYREE"/></div><p class="ft-desc">Luxury bags, curated and crafted.</p></div>
+      <div><span class="ft-col-title">Shop</span><ul class="ft-links"><li><a href="/shop.html">The Edit</a></li></ul></div>
+      <div><span class="ft-col-title">Account</span><ul class="ft-links"><li><a href="/login.html">Login</a></li><li><a href="/account.html">Orders</a></li></ul></div>
+      <div><span class="ft-col-title">Connect</span><ul class="ft-links"><li><a href="https://wa.me/2348000000000">WhatsApp</a></li></ul></div>
+      <div></div>
+    </div>
+    <div class="ft-bot"><span class="ft-copy">© 2025 Mayree.</span></div>
+  </div>
+</footer>
+<div class="toast" id="toast"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="/js/config.js"></script>
+<script src="/js/auth.js"></script>
+<script src="/js/cart.js"></script>
+<script>
+  updateCartBadge(); updateNavAuth();
+  document.getElementById('nav-toggle').addEventListener('click', () => document.getElementById('nav-mobile').classList.add('open'));
+  document.getElementById('nav-close').addEventListener('click', () => document.getElementById('nav-mobile').classList.remove('open'));
+
+  function renderWishlist() {
+    const list = getWishlist();
+    const grid = document.getElementById('wishlist-grid');
+    const empty = document.getElementById('wishlist-empty');
+    if (!list.length) { empty.style.display='block'; grid.style.display='none'; return; }
+    empty.style.display='none'; grid.style.display='grid';
+    grid.innerHTML = list.map(p => `
+      <div class="pcard">
+        <div class="pimg">
+          ${p.images?.[0] ? `<img src="${p.images[0]}" alt="${p.name}"/>` : '<div class="pimg-placeholder"></div>'}
+          <div class="pactions">
+            <button class="padd" onclick='addToCart(${JSON.stringify(p)})'>Add to Cart</button>
+            <button class="pwish active" onclick='toggleWishlist(${JSON.stringify(p)});renderWishlist();'>♥</button>
+          </div>
+        </div>
+        <div class="pinfo">
+          <div class="ptype">The Edit · One of One</div>
+          <div class="pname">${p.name}</div>
+          <div class="pprice-row"><span class="pprice">${fmt(p.price)}</span></div>
+          <div class="pstars">★★★★★</div>
+        </div>
+        <a class="pcard-link" href="/product.html?id=${p.id}"></a>
+      </div>`).join('');
+  }
+  renderWishlist();
+</script>
+</body>
+</html>
