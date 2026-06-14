@@ -82,3 +82,16 @@ function toggleWishlist(product) {
 function isWishlisted(id) {
   return getWishlist().some(i => i.id === id);
 }
+
+// ─── RECENTLY VIEWED ─────────────────────────────────────────
+function addToRecentlyViewed(product) {
+  let rv = JSON.parse(localStorage.getItem('mayree_rv') || '[]');
+  rv = rv.filter(p => p.id !== product.id);
+  rv.unshift({ id: product.id, name: product.name, price: product.price, images: product.images });
+  if (rv.length > 6) rv = rv.slice(0, 6);
+  localStorage.setItem('mayree_rv', JSON.stringify(rv));
+}
+
+function getRecentlyViewed() {
+  return JSON.parse(localStorage.getItem('mayree_rv') || '[]');
+}

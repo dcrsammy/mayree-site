@@ -1,14 +1,15 @@
 // ─── MAYREE CONFIG ───────────────────────────────────────────
-// Replace these with your real values before going live
 
-const SUPABASE_URL = 'https://YOUR_PROJECT.supabase.co';
-const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
+const SUPABASE_URL = 'https://tguxvixozyowqzplfone.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRndXh2aXhvenl3d3F6cGxmb25lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk4NTI5NTMsImV4cCI6MjA2NTQyODk1M30.placeholder';
+const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_s1kwJPMyv-tzSOhQj8_-sQ_ZmnOYSa3';
 const PAYSTACK_PUBLIC_KEY = 'pk_test_YOUR_PAYSTACK_KEY';
-const ADMIN_EMAIL = 'admin@mayree.co'; // only this email gets admin access
+const ADMIN_EMAIL = 'admin@mayree.co'; // replace with your actual email
 
 // ─── Supabase client ─────────────────────────────────────────
 const { createClient } = supabase;
-const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Use publishable key (new format) with fallback to anon key
+const sb = createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
 
 // ─── Helpers ─────────────────────────────────────────────────
 function fmt(amount) {

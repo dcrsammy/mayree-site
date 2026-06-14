@@ -53,7 +53,7 @@
 }
 </style>
 </head>
-<body>
+<body class="page-fade">
 
 <div class="announce">✦ &nbsp;Free shipping on orders over ₦80,000 &nbsp;✦&nbsp; Worldwide delivery &nbsp;✦</div>
 
@@ -70,7 +70,7 @@
       <a href="/account.html" class="nav-link" id="nav-account" style="display:none">Account</a>
       <button class="nav-icon" onclick="window.location='/wishlist.html'">♡</button>
       <button class="nav-icon" onclick="window.location='/cart.html'" style="position:relative">🛍 <span class="cart-count" id="cart-badge">0</span></button>
-      <button class="nav-toggle" id="nav-toggle">☰</button>
+      <button class="nav-search-btn" onclick="openSearch()">🔍</button><button class="nav-toggle" id="nav-toggle">☰</button>
     </div>
   </div>
 </nav>
@@ -157,9 +157,21 @@
 
     const wishlisted = isWishlisted(product.id);
 
+    addToRecentlyViewed(product);
+    renderRecentlyViewed(product.id);
+    document.getElementById('sticky-name').textContent = product.name;
+    // Color options - parse from description or use defaults
+    const colors = product.colors || ['Black','Brown','Nude','White','Gold'];
+    const colorEl = document.getElementById('color-options');
+    if(colorEl){
+      colorEl.innerHTML = colors.slice(0,5).map((col,i) => `
+        <button onclick="selectColor(this,'${col}')" style="padding:7px 16px;border:1px solid ${i===0?'var(--champagne)':'var(--border)'};background:${i===0?'rgba(201,168,122,.1)':'none'};font-size:10px;letter-spacing:2px;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;color:var(--ink);transition:all .2s;">${col}</button>
+      `).join('');
+    }
+    document.getElementById('sticky-price').textContent = fmt(product.price);
     document.getElementById('product-layout').innerHTML = `
       <div class="gallery">
-        <div class="main-img"><img id="main-product-img" src="${mainImgSrc}" alt="${product.name}"/></div>
+        <div class="main-img" onclick="openLightbox(imgs, 0)" style="cursor:zoom-in;"><img id="main-product-img" src="${mainImgSrc}" alt="${product.name}"/></div>
         <div class="thumb-row">${thumbs}</div>
       </div>
       <div class="product-info-col">
@@ -173,6 +185,12 @@
         <div class="product-divider"></div>
         <p class="product-desc">${product.description || 'A one-of-one piece handpicked by Mayree. Transformed from a luxury brand piece into something entirely new. Crafted for the woman who already knows what she wants.'}</p>
 
+        <div class="form-group" style="margin-bottom:20px;">
+          <label class="form-label">Color / Finish</label>
+          <div id="color-options" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;">
+            <!-- populated dynamically -->
+          </div>
+        </div>
         <div class="qty-selector">
           <span class="qty-label">Qty</span>
           <div class="qty-ctrl">
@@ -258,7 +276,120 @@
     }
   }
 
+  function selectColor(btn, color) {
+    document.querySelectorAll('#color-options button').forEach(b => {
+      b.style.borderColor = 'var(--border)';
+      b.style.background = 'none';
+    });
+    btn.style.borderColor = 'var(--champagne)';
+    btn.style.background = 'rgba(201,168,122,.1)';
+  }
+
   loadProduct();
+</script>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-prev" onclick="lightboxNav(-1)">‹</button>
+  <img id="lightbox-img" src="" alt=""/>
+  <button class="lightbox-next" onclick="lightboxNav(1)">›</button>
+</div>
+
+<!-- STICKY MOBILE BUY -->
+<div class="sticky-buy" id="sticky-buy">
+  <div style="display:flex;justify-content:space-between;align-items:center;">
+    <div>
+      <div class="sticky-buy-name" id="sticky-name"></div>
+      <div class="sticky-buy-price" id="sticky-price"></div>
+    </div>
+  </div>
+  <button class="sticky-buy-btn" onclick="addToCartAndGo()">Add to Cart</button>
+</div>
+
+<!-- SEARCH OVERLAY -->
+<div class="search-overlay" id="search-overlay">
+  <button class="search-overlay-close" onclick="closeSearch()">✕</button>
+  <div class="search-overlay-inner">
+    <input type="text" id="search-input-overlay" placeholder="Search bags..." oninput="liveSearch(this.value)" autocomplete="off"/>
+    <div class="search-hint">Type to search The Edit</div>
+    <div class="search-results" id="search-results-overlay"></div>
+  </div>
+</div>
+
+<!-- RECENTLY VIEWED SECTION -->
+<div class="wrap rv-section" id="rv-section" style="display:none;">
+  <div class="sec-head" style="text-align:left;margin-bottom:28px;">
+    <span class="ey">Your History</span>
+    <h3 class="sec-title">Recently Viewed</h3>
+    <div class="rule rule-left"></div>
+  </div>
+  <div class="prod-grid" id="rv-grid"></div>
+</div>
+<script>
+// ── Search ──────────────────────────────────────────────────
+function openSearch() { document.getElementById('search-overlay').classList.add('open'); document.getElementById('search-input-overlay').focus(); }
+function closeSearch() { document.getElementById('search-overlay').classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape'){closeLightbox();closeSearch();} });
+
+async function liveSearch(q) {
+  if(q.length < 2) { document.getElementById('search-results-overlay').innerHTML=''; return; }
+  const { data } = await sb.from('products').select('*').ilike('name','%'+q+'%').eq('active',true).limit(8);
+  const results = document.getElementById('search-results-overlay');
+  if(!data||!data.length){results.innerHTML='<p style="color:var(--muted);font-size:13px;grid-column:1/-1;">No results found</p>';return;}
+  results.innerHTML = data.map(p=>`
+    <a href="/product.html?id=${p.id}" style="display:block;">
+      <div style="aspect-ratio:3/4;overflow:hidden;background:var(--beige);margin-bottom:8px;">
+        ${p.images?.[0]?`<img src="${p.images[0]}" style="width:100%;height:100%;object-fit:cover;"/>`:''} 
+      </div>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:14px;">${p.name}</div>
+      <div style="font-size:12px;color:var(--champagne);">${fmt(p.price)}</div>
+    </a>`).join('');
+}
+
+// ── Lightbox ─────────────────────────────────────────────────
+let lbImgs = [], lbIdx = 0;
+function openLightbox(imgs, idx) {
+  lbImgs = imgs; lbIdx = idx;
+  document.getElementById('lightbox-img').src = imgs[idx];
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+function lightboxNav(dir) {
+  lbIdx = (lbIdx + dir + lbImgs.length) % lbImgs.length;
+  document.getElementById('lightbox-img').src = lbImgs[lbIdx];
+}
+
+// ── Recently Viewed ──────────────────────────────────────────
+function renderRecentlyViewed(excludeId) {
+  const list = getRecentlyViewed().filter(p => p.id !== excludeId);
+  if(!list.length) return;
+  const section = document.getElementById('rv-section');
+  section.style.display = 'block';
+  document.getElementById('rv-grid').innerHTML = list.map(p => `
+    <div class="pcard">
+      <div class="pimg">
+        ${p.images?.[0]?`<img src="${p.images[0]}" alt="${p.name}" loading="lazy"/>`:'<div class="pimg-placeholder"></div>'}
+        <div class="pactions">
+          <button class="padd" onclick="addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')})">Quick Add</button>
+        </div>
+      </div>
+      <div class="pinfo">
+        <div class="pname">${p.name}</div>
+        <div class="pprice-row"><span class="pprice">${fmt(p.price)}</span></div>
+      </div>
+      <a class="pcard-link" href="/product.html?id=${p.id}"></a>
+    </div>`).join('');
+}
+
+// ── Sticky buy visibility ────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const addBtn = document.querySelector('.product-actions-col');
+  if(!addBtn) return;
+  const rect = addBtn.getBoundingClientRect();
+  const sticky = document.getElementById('sticky-buy');
+  if(sticky) sticky.style.display = rect.bottom < 0 ? 'flex' : 'none';
+});
 </script>
 </body>
 </html>

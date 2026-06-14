@@ -7,7 +7,7 @@
 <link rel="stylesheet" href="/css/mayree.css"/>
 <link rel="icon" href="/assets/logo.png"/>
 </head>
-<body>
+<body class="page-fade">
 
 <div class="announce">✦ &nbsp;Free shipping on orders over ₦80,000 &nbsp;✦</div>
 
@@ -40,9 +40,18 @@
 </div>
 
 <div class="wrap" style="padding-top:52px;padding-bottom:80px;">
-  <div id="cart-empty" style="display:none;text-align:center;padding:80px 20px;">
-    <p style="font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--muted);margin-bottom:24px;">Your cart is empty</p>
-    <a href="/shop.html" class="btn btn-dark">Continue Shopping</a>
+  <div id="cart-empty" style="display:none;">
+    <div class="empty-cart-wrap">
+      <div style="font-size:52px;margin-bottom:20px;">🛍</div>
+      <h2>Your cart is empty</h2>
+      <p>Looks like you haven't added anything yet.<br/>The Edit is waiting for you.</p>
+      <a href="/shop.html" class="btn btn-dark">Shop The Edit</a>
+      <a href="/index.html#request" class="btn btn-ghost" style="margin-left:12px;">By Request</a>
+    </div>
+    <div class="empty-cart-products wrap">
+      <h3 style="font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;margin-bottom:28px;text-align:center;">You Might Love</h3>
+      <div class="prod-grid" id="upsell-grid"><div class="loading-spinner"></div></div>
+    </div>
   </div>
 
   <div id="cart-content" style="display:grid;grid-template-columns:1fr 360px;gap:48px;align-items:start;">
@@ -62,7 +71,26 @@
       </table>
       <div style="display:flex;justify-content:space-between;margin-top:24px;flex-wrap:wrap;gap:12px;">
         <a href="/shop.html" class="btn btn-ghost btn-sm">← Continue Shopping</a>
-        <button onclick="clearCart();renderCart();" class="btn btn-ghost btn-sm">Clear Cart</button>
+        <button onclick="clearCart();renderCart();
+  // Load upsell products for empty cart
+  async function loadUpsell(){
+    const{data}=await sb.from('products').select('*').eq('active',true).limit(4);
+    const g=document.getElementById('upsell-grid');
+    if(!g||!data) return;
+    g.innerHTML=(data||[]).map(p=>`
+      <div class="pcard">
+        <div class="pimg">
+          ${p.images?.[0]?`<img src="${p.images[0]}" alt="${p.name}" loading="lazy"/>`:'<div class="pimg-placeholder"></div>'}
+          <div class="pactions"><button class="padd" onclick="addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')});renderCart();">Quick Add</button></div>
+        </div>
+        <div class="pinfo">
+          <div class="pname">${p.name}</div>
+          <div class="pprice-row"><span class="pprice">${fmt(p.price)}</span></div>
+        </div>
+        <a class="pcard-link" href="/product.html?id=${p.id}"></a>
+      </div>`).join('');
+  }
+  loadUpsell();" class="btn btn-ghost btn-sm">Clear Cart</button>
       </div>
     </div>
 
@@ -136,13 +164,70 @@
         <td>${fmt(item.price)}</td>
         <td>
           <div class="qty-ctrl">
-            <button class="qty-btn" onclick="updateQty('${item.id}', ${item.qty - 1});renderCart();">−</button>
+            <button class="qty-btn" onclick="updateQty('${item.id}', ${item.qty - 1});renderCart();
+  // Load upsell products for empty cart
+  async function loadUpsell(){
+    const{data}=await sb.from('products').select('*').eq('active',true).limit(4);
+    const g=document.getElementById('upsell-grid');
+    if(!g||!data) return;
+    g.innerHTML=(data||[]).map(p=>`
+      <div class="pcard">
+        <div class="pimg">
+          ${p.images?.[0]?`<img src="${p.images[0]}" alt="${p.name}" loading="lazy"/>`:'<div class="pimg-placeholder"></div>'}
+          <div class="pactions"><button class="padd" onclick="addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')});renderCart();">Quick Add</button></div>
+        </div>
+        <div class="pinfo">
+          <div class="pname">${p.name}</div>
+          <div class="pprice-row"><span class="pprice">${fmt(p.price)}</span></div>
+        </div>
+        <a class="pcard-link" href="/product.html?id=${p.id}"></a>
+      </div>`).join('');
+  }
+  loadUpsell();">−</button>
             <span class="qty-val">${item.qty}</span>
-            <button class="qty-btn" onclick="updateQty('${item.id}', ${item.qty + 1});renderCart();">+</button>
+            <button class="qty-btn" onclick="updateQty('${item.id}', ${item.qty + 1});renderCart();
+  // Load upsell products for empty cart
+  async function loadUpsell(){
+    const{data}=await sb.from('products').select('*').eq('active',true).limit(4);
+    const g=document.getElementById('upsell-grid');
+    if(!g||!data) return;
+    g.innerHTML=(data||[]).map(p=>`
+      <div class="pcard">
+        <div class="pimg">
+          ${p.images?.[0]?`<img src="${p.images[0]}" alt="${p.name}" loading="lazy"/>`:'<div class="pimg-placeholder"></div>'}
+          <div class="pactions"><button class="padd" onclick="addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')});renderCart();">Quick Add</button></div>
+        </div>
+        <div class="pinfo">
+          <div class="pname">${p.name}</div>
+          <div class="pprice-row"><span class="pprice">${fmt(p.price)}</span></div>
+        </div>
+        <a class="pcard-link" href="/product.html?id=${p.id}"></a>
+      </div>`).join('');
+  }
+  loadUpsell();">+</button>
           </div>
         </td>
         <td style="font-weight:400;">${fmt(item.price * item.qty)}</td>
-        <td><button onclick="removeFromCart('${item.id}');renderCart();" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;" title="Remove">×</button></td>
+        <td><button onclick="removeFromCart('${item.id}');renderCart();
+  // Load upsell products for empty cart
+  async function loadUpsell(){
+    const{data}=await sb.from('products').select('*').eq('active',true).limit(4);
+    const g=document.getElementById('upsell-grid');
+    if(!g||!data) return;
+    g.innerHTML=(data||[]).map(p=>`
+      <div class="pcard">
+        <div class="pimg">
+          ${p.images?.[0]?`<img src="${p.images[0]}" alt="${p.name}" loading="lazy"/>`:'<div class="pimg-placeholder"></div>'}
+          <div class="pactions"><button class="padd" onclick="addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')});renderCart();">Quick Add</button></div>
+        </div>
+        <div class="pinfo">
+          <div class="pname">${p.name}</div>
+          <div class="pprice-row"><span class="pprice">${fmt(p.price)}</span></div>
+        </div>
+        <a class="pcard-link" href="/product.html?id=${p.id}"></a>
+      </div>`).join('');
+  }
+  loadUpsell();" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:18px;" title="Remove">×</button></td>
       </tr>
     `).join('');
 
@@ -167,6 +252,25 @@
   }
 
   renderCart();
+  // Load upsell products for empty cart
+  async function loadUpsell(){
+    const{data}=await sb.from('products').select('*').eq('active',true).limit(4);
+    const g=document.getElementById('upsell-grid');
+    if(!g||!data) return;
+    g.innerHTML=(data||[]).map(p=>`
+      <div class="pcard">
+        <div class="pimg">
+          ${p.images?.[0]?`<img src="${p.images[0]}" alt="${p.name}" loading="lazy"/>`:'<div class="pimg-placeholder"></div>'}
+          <div class="pactions"><button class="padd" onclick="addToCart(${JSON.stringify(p).replace(/"/g,'&quot;')});renderCart();">Quick Add</button></div>
+        </div>
+        <div class="pinfo">
+          <div class="pname">${p.name}</div>
+          <div class="pprice-row"><span class="pprice">${fmt(p.price)}</span></div>
+        </div>
+        <a class="pcard-link" href="/product.html?id=${p.id}"></a>
+      </div>`).join('');
+  }
+  loadUpsell();
 </script>
 </body>
 </html>

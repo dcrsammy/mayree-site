@@ -588,3 +588,82 @@ footer.main-footer { background: var(--ink); padding: 68px 52px 36px; color: rgb
   .prod-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
   .ft-top { grid-template-columns: 1fr; }
 }
+
+/* ─── SEARCH OVERLAY ─────────────────────────────────────────── */
+.search-overlay {
+  position: fixed; inset: 0; background: rgba(253,251,247,.97);
+  z-index: 700; display: none; flex-direction: column;
+  align-items: center; padding-top: 120px;
+}
+.search-overlay.open { display: flex; }
+.search-overlay-inner { width: 100%; max-width: 680px; padding: 0 28px; }
+.search-overlay input {
+  width: 100%; background: none; border: none; border-bottom: 2px solid var(--champagne);
+  font-family: 'Cormorant Garamond', serif; font-size: clamp(24px,4vw,42px);
+  color: var(--ink); outline: none; padding: 12px 0; letter-spacing: 2px;
+}
+.search-overlay input::placeholder { color: var(--muted); }
+.search-overlay-close {
+  position: absolute; top: 28px; right: 32px;
+  background: none; border: none; font-size: 28px; cursor: pointer; color: var(--muted);
+}
+.search-results { margin-top: 32px; display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; }
+.search-hint { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--muted); margin-top: 20px; text-align: center; }
+
+/* ─── LIGHTBOX ───────────────────────────────────────────────── */
+.lightbox {
+  position: fixed; inset: 0; background: rgba(26,18,8,.92);
+  z-index: 900; display: none; align-items: center; justify-content: center;
+}
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+.lightbox-close {
+  position: absolute; top: 20px; right: 28px;
+  background: none; border: none; color: white; font-size: 32px; cursor: pointer;
+}
+.lightbox-prev, .lightbox-next {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  background: rgba(253,251,247,.1); border: 1px solid rgba(255,255,255,.2);
+  color: white; font-size: 22px; cursor: pointer; padding: 12px 18px;
+  transition: background .25s;
+}
+.lightbox-prev:hover, .lightbox-next:hover { background: rgba(253,251,247,.2); }
+.lightbox-prev { left: 20px; }
+.lightbox-next { right: 20px; }
+
+/* ─── STICKY MOBILE BUY BUTTON ───────────────────────────────── */
+.sticky-buy {
+  display: none;
+  position: fixed; bottom: 0; left: 0; right: 0;
+  background: var(--ivory); border-top: 1px solid var(--border);
+  padding: 12px 20px; z-index: 400;
+  flex-direction: column; gap: 8px;
+}
+.sticky-buy-name { font-family: 'Cormorant Garamond', serif; font-size: 15px; }
+.sticky-buy-price { font-size: 13px; color: var(--champagne); }
+.sticky-buy-btn { background: var(--brown); color: var(--ivory); border: none; padding: 14px; font-size: 10px; letter-spacing: 3px; text-transform: uppercase; cursor: pointer; font-family: 'Jost', sans-serif; width: 100%; }
+@media (max-width: 768px) { .sticky-buy { display: flex; } }
+
+/* ─── PAGE TRANSITION ────────────────────────────────────────── */
+.page-fade { animation: pageFadeIn .35s ease; }
+@keyframes pageFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ─── EMPTY CART UPSELL ──────────────────────────────────────── */
+.empty-cart-wrap { text-align: center; padding: 80px 20px; }
+.empty-cart-wrap h2 { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 300; color: var(--muted); margin-bottom: 12px; }
+.empty-cart-wrap p { font-size: 13px; color: var(--muted); margin-bottom: 32px; }
+.empty-cart-products { margin-top: 60px; }
+.empty-cart-products h3 { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; margin-bottom: 28px; }
+
+/* ─── RECENTLY VIEWED ────────────────────────────────────────── */
+.rv-section { padding: 60px 0; border-top: 1px solid var(--border); margin-top: 60px; }
+
+/* ─── MOBILE BREADCRUMB FIX ──────────────────────────────────── */
+@media (max-width: 768px) {
+  .breadcrumb { font-size: 10px; flex-wrap: wrap; padding: 12px 0; }
+  .search-results { grid-template-columns: 1fr 1fr; }
+}
+
+/* ─── NAV SEARCH ICON ────────────────────────────────────────── */
+.nav-search-btn { background: none; border: none; cursor: pointer; font-size: 16px; color: var(--ink); padding: 4px; transition: color .25s; }
+.nav-search-btn:hover { color: var(--gold); }
