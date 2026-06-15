@@ -1,7 +1,7 @@
 // ─── MAYREE CONFIG ───────────────────────────────────────────
 
 const SUPABASE_URL = 'https://tguxvixozyowqzplfone.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRndXh2aXhvenl3d3F6cGxmb25lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk4NTI5NTMsImV4cCI6MjA2NTQyODk1M30.placeholder';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRndXh2aXhvenlvd3F6cGxmb25lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE0MDQzOTIsImV4cCI6MjA5Njk4MDM5Mn0.35i3HufOt5bWmTJ6JwmI1rAcygcW0WVNNT4CUTkk5yA';
 const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_s1kwJPMyv-tzSOhQj8_-sQ_ZmnOYSa3';
 const PAYSTACK_PUBLIC_KEY = 'pk_test_YOUR_PAYSTACK_KEY';
 const ADMIN_EMAIL = 'admin@mayree.co'; // replace with your actual email
