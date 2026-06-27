@@ -22,7 +22,7 @@ async function fetchProduct(id) {
 
 function productCardHTML(p) {
   const img = p.images?.[0] || '';
-  const soldOut = (p.stock !== null && p.stock !== undefined && p.stock <= 0);
+  const soldOut = (p.stock !== null && p.stock !== undefined && parseInt(p.stock) <= 0);
   const badgeHTML = soldOut
     ? '<span class="pbadge sold-out">Sold Out</span>'
     : p.badge
@@ -82,4 +82,5 @@ async function renderProducts(containerId, filters = {}) {
   }
   container.innerHTML = products.map(productCardHTML).join('');
 }
+
 
