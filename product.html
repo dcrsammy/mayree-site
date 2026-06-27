@@ -142,12 +142,23 @@
   let currentProduct = null;
   let qty = 1;
 
+  function applySoldOutState(product) {
+    const soldOut = product && product.stock !== null && product.stock !== undefined && product.stock <= 0;
+    const mainBtn = document.getElementById('mainAddBtn');
+    const stickyBtn = document.getElementById('stickyAddBtn');
+    if (soldOut) {
+      if (mainBtn) { mainBtn.textContent = 'Sold Out'; mainBtn.disabled = true; mainBtn.style.opacity = '0.5'; mainBtn.style.cursor = 'not-allowed'; mainBtn.onclick = null; }
+      if (stickyBtn) { stickyBtn.textContent = 'Sold Out'; stickyBtn.disabled = true; stickyBtn.style.opacity = '0.5'; stickyBtn.style.cursor = 'not-allowed'; stickyBtn.onclick = null; }
+    }
+  }
+
   async function loadProduct() {
     const id = getParam('id');
     if (!id) { window.location.href = '/shop.html'; return; }
     const product = await fetchProduct(id);
     if (!product) { window.location.href = '/shop.html'; return; }
     currentProduct = product;
+    applySoldOutState(product);
 
     document.title = `${product.name} — MAYREE`;
     document.getElementById('product-breadcrumb').textContent = product.name;
@@ -202,7 +213,7 @@
         </div>
 
         <div class="product-actions-col">
-          <button class="btn btn-dark btn-full" onclick="addToCartAndGo()">Add to Cart</button>
+          <button class="btn btn-dark btn-full" id="mainAddBtn" onclick="addToCartAndGo()">Add to Cart</button>
           <button class="btn btn-gold btn-full" onclick="buyNow()">Buy Now</button>
         </div>
 
@@ -312,7 +323,7 @@
       <div class="sticky-buy-price" id="sticky-price"></div>
     </div>
   </div>
-  <button class="sticky-buy-btn" onclick="addToCartAndGo()">Add to Cart</button>
+  <button class="sticky-buy-btn" id="stickyAddBtn" onclick="addToCartAndGo()">Add to Cart</button>
 </div>
 
 <!-- SEARCH OVERLAY -->
@@ -401,3 +412,4 @@ window.addEventListener('scroll', () => {
 </script>
 </body>
 </html>
+
