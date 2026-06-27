@@ -22,17 +22,23 @@ async function fetchProduct(id) {
 
 function productCardHTML(p) {
   const img = p.images?.[0] || '';
-  const badgeHTML = p.badge
-    ? `<span class="pbadge ${p.badge === 'New In' ? 'new-in' : ''}">${p.badge}</span>`
-    : '';
+  const soldOut = (p.stock !== null && p.stock !== undefined && p.stock <= 0);
+  const badgeHTML = soldOut
+    ? '<span class="pbadge sold-out">Sold Out</span>'
+    : p.badge
+      ? `<span class="pbadge ${p.badge === 'New In' ? 'new-in' : ''}">${p.badge}</span>`
+      : '';
   const wishlisted = isWishlisted(p.id);
   return `
-  <div class="pcard" data-id="${p.id}">
+  <div class="pcard ${soldOut ? 'sold-out-card' : ''}" data-id="${p.id}">
     <div class="pimg">
       ${badgeHTML}
       ${img ? `<img src="${img}" alt="${p.name}" loading="lazy"/>` : '<div class="pimg-placeholder"></div>'}
       <div class="pactions">
-        <button class="padd" onclick="quickAdd('${p.id}')">Quick Add</button>
+        ${soldOut
+          ? '<button class="padd sold-out-btn" disabled>Sold Out</button>'
+          : `<button class="padd" onclick="quickAdd('${p.id}')">Quick Add</button>`
+        }
         <button class="pwish ${wishlisted ? 'active' : ''}" onclick="wishToggle(this,'${p.id}')">
           ${wishlisted ? '&#9829;' : '&#9825;'}
         </button>
@@ -76,3 +82,4 @@ async function renderProducts(containerId, filters = {}) {
   }
   container.innerHTML = products.map(productCardHTML).join('');
 }
+
