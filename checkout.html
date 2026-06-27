@@ -271,23 +271,26 @@
         name: `${firstName} ${lastName}`,
         phone
       },
-      callback: async function(response) {
-        // Verify and update order
-        await sb.from('orders').update({ status: 'paid', paystack_ref: response.reference }).eq('id', order.id);
+      callback: function(response) {
+        // Paystack requires non-async callback — run async work inside
+        (async () => {
+          // Verify and update order
+          await sb.from('orders').update({ status: 'paid', paystack_ref: response.reference }).eq('id', order.id);
 
-        // Decrement stock for each purchased item
-        const cartItems = getCart();
-        for (const item of cartItems) {
-          if (!item.id) continue;
-          const { data: prod } = await sb.from('products').select('stock').eq('id', item.id).single();
-          if (prod && prod.stock !== null && prod.stock !== undefined) {
-            const newStock = Math.max(0, (prod.stock || 0) - (item.qty || 1));
-            await sb.from('products').update({ stock: newStock }).eq('id', item.id);
+          // Decrement stock for each purchased item
+          const cartItems = getCart();
+          for (const item of cartItems) {
+            if (!item.id) continue;
+            const { data: prod } = await sb.from('products').select('stock').eq('id', item.id).single();
+            if (prod && prod.stock !== null && prod.stock !== undefined) {
+              const newStock = Math.max(0, (prod.stock || 0) - (item.qty || 1));
+              await sb.from('products').update({ stock: newStock }).eq('id', item.id);
+            }
           }
-        }
 
-        clearCart();
-        window.location.href = `/confirmation.html?ref=${response.reference}&order=${order.id}`;
+          clearCart();
+          window.location.href = `/confirmation.html?ref=${response.reference}&order=${order.id}`;
+        })();
       },
       onClose: function() {
         setLoading(btn, false, 'Pay Securely with Paystack');
@@ -303,4 +306,5 @@
 </script>
 </body>
 </html>
+
 
