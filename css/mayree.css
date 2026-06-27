@@ -667,3 +667,11 @@ footer.main-footer { background: var(--ink); padding: 68px 52px 36px; color: rgb
 /* ─── NAV SEARCH ICON ────────────────────────────────────────── */
 .nav-search-btn { background: none; border: none; cursor: pointer; font-size: 16px; color: var(--ink); padding: 4px; transition: color .25s; }
 .nav-search-btn:hover { color: var(--gold); }
+
+
+/* --- sold out --- */
+.pbadge.sold-out { background: #1a1a1a; color: #fff; }
+.sold-out-card { opacity: 0.85; }
+.sold-out-card .pimg img { filter: grayscale(20%); }
+.sold-out-btn { background: #ccc !important; color: #666 !important; cursor: not-allowed !important; }
+.sold-out-btn:hover { background: #ccc !important; }
